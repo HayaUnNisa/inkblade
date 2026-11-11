@@ -1,20 +1,11 @@
-import { useState, type FormEvent } from 'react';
+
 import { Link } from 'react-router-dom';
-import { ArrowRight, AtSign, Globe, MessageCircle, Rss } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { genres } from '@/data/catalog';
-import { useToast } from '@/context/ToastContext';
+
 import Logo from './Logo';
 
 export default function Footer() {
-  const toast = useToast();
-  const [email, setEmail] = useState('');
-  const submit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!/^\S+@\S+\.\S+$/.test(email)) return toast('Please enter a valid email');
-    setEmail('');
-    toast('You’re on the list — new chapters every Friday');
-  };
-
   return (
     <footer className="relative mt-24 overflow-hidden border-t hairline">
       <div
@@ -29,13 +20,7 @@ export default function Footer() {
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted">
               A home for stories forged in ink and steel. Read, follow and collect the series that keep you up past midnight.
             </p>
-            <div className="mt-6 flex gap-2">
-              {[AtSign, MessageCircle, Globe, Rss].map((I, i) => (
-                <a key={i} href="#" aria-label="Social link" className="grid h-10 w-10 place-items-center rounded-full border hairline text-muted transition-all hover:-translate-y-0.5 hover:border-accent hover:text-accent">
-                  <I size={16} />
-                </a>
-              ))}
-            </div>
+
           </div>
           <div>
             <h4 className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted">Explore</h4>
@@ -48,24 +33,19 @@ export default function Footer() {
           <div>
             <h4 className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted">Genres</h4>
             <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 text-sm font-medium">
-              {genres.slice(0, 8).map((g) => (
+              {['Action', 'Fantasy', 'Sci-Fi'].filter((g) => genres.includes(g)).map((g) => (
                 <li key={g}><Link to={`/browse?genre=${encodeURIComponent(g)}`} className="transition-colors hover:text-accent">{g}</Link></li>
               ))}
             </ul>
           </div>
           <div>
-            <h4 className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted">New chapter alerts</h4>
-            <p className="mt-5 text-sm text-muted">One email a week. Only the chapters worth staying up for.</p>
-            <form onSubmit={submit} className="mt-4 flex gap-2">
-              <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="you@email.com" aria-label="Email" className="input rounded-full" />
-              <button className="btn btn-primary shrink-0 px-4" aria-label="Subscribe"><ArrowRight size={16} /></button>
-            </form>
+            <h4 className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted">Keep reading</h4><p className="mt-5 text-sm text-muted">Find the newest chapters, or save a series to your library to return to it later.</p><Link to="/browse?sort=updated" className="btn btn-primary mt-4">View latest chapters <ArrowRight size={16} /></Link>
           </div>
         </div>
         <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t hairline pt-6 text-xs text-muted sm:flex-row sm:items-center">
-          <p>© {new Date().getFullYear()} Inkblade. All series are fictional demo content.</p>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-ink">Terms</a><a href="#" className="hover:text-ink">Privacy</a><a href="#" className="hover:text-ink">Creators</a>
+          <p>© {new Date().getFullYear()} Inkblade. Stories and artwork presented on InkBlade.</p>
+          <div className="flex flex-wrap gap-6">
+            <Link to="/terms" className="hover:text-ink">Terms &amp; conditions</Link><Link to="/privacy" className="hover:text-ink">Privacy policy</Link><Link to="/creators" className="hover:text-ink">Creators</Link>
           </div>
         </div>
         <p aria-hidden className="pointer-events-none mt-10 select-none text-center font-display text-[18vw] font-extrabold leading-[0.8] tracking-tighter text-stroke opacity-60 lg:text-[13rem]">
@@ -75,4 +55,5 @@ export default function Footer() {
     </footer>
   );
 }
+
 
