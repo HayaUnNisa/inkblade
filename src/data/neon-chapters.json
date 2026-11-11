@@ -1,0 +1,54 @@
+[
+  {
+    "number": 1,
+    "title": "After the Ash Garden",
+    "date": "2026-11-07T19:14:33.711Z",
+    "pages": [
+      "/comics/neon-kitsune/1/001.png",
+      "/comics/neon-kitsune/1/002.png",
+      "/comics/neon-kitsune/1/003.png",
+      "/comics/neon-kitsune/1/004.png",
+      "/comics/neon-kitsune/1/005.png",
+      "/comics/neon-kitsune/1/006.png"
+    ]
+  },
+  {
+    "number": 2,
+    "title": "Beyond the Broken Lantern",
+    "date": "2026-11-08T19:14:33.796Z",
+    "pages": [
+      "/comics/neon-kitsune/2/001.png",
+      "/comics/neon-kitsune/2/002.png",
+      "/comics/neon-kitsune/2/003.png",
+      "/comics/neon-kitsune/2/004.png",
+      "/comics/neon-kitsune/2/005.png",
+      "/comics/neon-kitsune/2/006.png"
+    ]
+  },
+  {
+    "number": 3,
+    "title": "After the Silent Blade",
+    "date": "2026-11-09T19:14:33.865Z",
+    "pages": [
+      "/comics/neon-kitsune/3/001.png",
+      "/comics/neon-kitsune/3/002.png",
+      "/comics/neon-kitsune/3/003.png",
+      "/comics/neon-kitsune/3/004.png",
+      "/comics/neon-kitsune/3/005.png",
+      "/comics/neon-kitsune/3/006.png"
+    ]
+  },
+  {
+    "number": 4,
+    "title": "A Last Duel",
+    "date": "2026-11-10T19:14:33.938Z",
+    "pages": [
+      "/comics/neon-kitsune/4/001.png",
+      "/comics/neon-kitsune/4/002.png",
+      "/comics/neon-kitsune/4/003.png",
+      "/comics/neon-kitsune/4/004.png",
+      "/comics/neon-kitsune/4/005.png",
+      "/comics/neon-kitsune/4/006.png"
+    ]
+  }
+]
