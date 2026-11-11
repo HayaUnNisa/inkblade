@@ -71,7 +71,7 @@ const seeds: Seed[] = [
     weeklyScore: 95, monthlyScore: 96, chapterCount: 8, latestDaysAgo: 1,
   },
   {
-    slug: 'neon-kitsune', cover: '/comics/neon-kitsune/cover.png', title: 'Neon Kitsune', altTitle: '電狐', kanji: '電狐',
+    slug: 'neon-kitsune', cover: '/comics/neon-kitsune/cover.webp', title: 'Neon Kitsune', altTitle: '電狐', kanji: '電狐',
     author: 'Aya Takeda', artist: 'Studio Hoshi', status: 'Ongoing', year: 2025,
     genres: ['Sci-Fi', 'Mystery', 'Thriller'], rating: 4.6, views: 18_400_000, follows: 760_000,
     synopsis:
@@ -85,19 +85,19 @@ export const catalog: Series[] = seeds.map(({ chapterCount, latestDaysAgo, every
   ...s,
   chapters: s.slug === 'neon-kitsune' ? neonChapters : s.slug === 'sakura-oathkeeper' ? sakuraChapters : demoChapters(s.slug, chapterCount, latestDaysAgo, every).map((chapter) =>
     s.slug === 'crimson-moonblade' && chapter.number === 1
-      ? { ...chapter, title: 'After the Hollow Crown', pages: pages(s.slug, 1, 6, 'png'), placeholderPages: undefined }
+      ? { ...chapter, title: 'After the Hollow Crown', pages: pages(s.slug, 1, 6, 'webp'), placeholderPages: undefined }
       : s.slug === 'crimson-moonblade' && chapter.number === 2
-      ? { ...chapter, title: 'Beneath the Paper Oath', pages: pages(s.slug, 2, 6, 'png'), placeholderPages: undefined }
+      ? { ...chapter, title: 'Beneath the Paper Oath', pages: pages(s.slug, 2, 6, 'webp'), placeholderPages: undefined }
       : s.slug === 'crimson-moonblade' && chapter.number === 3
-      ? { ...chapter, title: 'Beneath the Last Duel', pages: pages(s.slug, 3, 6, 'png'), placeholderPages: undefined }
+      ? { ...chapter, title: 'Beneath the Last Duel', pages: pages(s.slug, 3, 6, 'webp'), placeholderPages: undefined }
       : s.slug === 'crimson-moonblade' && chapter.number === 4
-      ? { ...chapter, title: 'A Falling Petals', pages: pages(s.slug, 4, 6, 'png'), placeholderPages: undefined }
+      ? { ...chapter, title: 'A Falling Petals', pages: pages(s.slug, 4, 6, 'webp'), placeholderPages: undefined }
       : s.slug === 'crimson-moonblade' && chapter.number === 5
-      ? { ...chapter, title: "Within the Red Tide", pages: pages(s.slug, 5, 6, 'png'), placeholderPages: undefined }
+      ? { ...chapter, title: "Within the Red Tide", pages: pages(s.slug, 5, 6, 'webp'), placeholderPages: undefined }
       : s.slug === 'crimson-moonblade' && chapter.number === 6
-      ? { ...chapter, title: "Beyond the Ash Garden", pages: pages(s.slug, 6, 6, 'png'), placeholderPages: undefined }
+      ? { ...chapter, title: "Beyond the Ash Garden", pages: pages(s.slug, 6, 6, 'webp'), placeholderPages: undefined }
       : s.slug === 'crimson-moonblade' && chapter.number === 7
-      ? { ...chapter, title: "The Hidden Gate", date: '2026-11-10T17:14:41.1190379Z', pages: pages(s.slug, 7, 6, 'png'), placeholderPages: undefined }
+      ? { ...chapter, title: "The Hidden Gate", date: '2026-11-10T17:14:41.1190379Z', pages: pages(s.slug, 7, 6, 'webp'), placeholderPages: undefined }
       : chapter,
   ),
 }));

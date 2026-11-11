@@ -11,7 +11,7 @@ export default function Logo({ className = '', variant = 'navbar' }: { className
         {(['dark', 'light'] as const).map((mode) => (
           <img
             key={mode}
-            src={`${import.meta.env.BASE_URL}branding/inkblade-${mode}.png`}
+            src={`${import.meta.env.BASE_URL}branding/inkblade-${mode}.webp`}
             alt=""
             aria-hidden="true"
             width={1254}
