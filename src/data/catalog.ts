@@ -53,31 +53,31 @@ const seeds: Seed[] = [
   {
     slug: 'crimson-moonblade', title: 'Crimson Moonblade', altTitle: '紅月の刃', kanji: '紅月',
     author: 'Ren Kagami', artist: 'Ren Kagami', status: 'Ongoing', year: 2023,
-    genres: ['Action', 'Fantasy', 'Supernatural'], rating: 4.9, views: 48_200_000, follows: 1_940_000,
+    genres: ['Action'],
     synopsis:
       'Under a moon that bleeds every hundred years, the exiled swordsman Akane Shiro carries a blade that drinks memory instead of blood. Each cut erases a piece of who he was — and the shrine-lords who exiled him are counting on him forgetting why.',
     cover: '/theme/dark-cover.webp', banner: '/theme/dark-full.webp',
     palette: ['#e11d48', '#0b0a14'], schedule: 'Sat', direction: 'rtl', featured: true,
-    weeklyScore: 98, monthlyScore: 97, chapterCount: 7, latestDaysAgo: 0.2,
+    chapterCount: 7, latestDaysAgo: 0.2,
   },
   {
     slug: 'sakura-oathkeeper', title: 'Sakura Oathkeeper', altTitle: '桜の誓い', kanji: '桜誓',
     author: 'Mio Hanazono', artist: 'Kei Arashi', status: 'Ongoing', year: 2024,
-    genres: ['Fantasy', 'Adventure', 'Romance'], rating: 4.8, views: 36_700_000, follows: 1_520_000,
+    genres: ['Fantasy'],
     synopsis:
       'Sworn to guard a sky-castle that only appears at sunrise, Yuki Shirogane has kept her oath for three hundred dawns. When a stranger climbs the waterfall stair carrying her own lost sword, the oath begins to unravel petal by petal.',
     cover: '/theme/light-cover.webp', banner: '/theme/light-full.webp',
     palette: ['#d03e74', '#f2ecfb'], schedule: 'Wed', direction: 'rtl', featured: true,
-    weeklyScore: 95, monthlyScore: 96, chapterCount: 8, latestDaysAgo: 1,
+    chapterCount: 8, latestDaysAgo: 1,
   },
   {
     slug: 'neon-kitsune', cover: '/comics/neon-kitsune/cover.webp', title: 'Neon Kitsune', altTitle: '電狐', kanji: '電狐',
     author: 'Aya Takeda', artist: 'Studio Hoshi', status: 'Ongoing', year: 2025,
-    genres: ['Sci-Fi', 'Mystery', 'Thriller'], rating: 4.6, views: 18_400_000, follows: 760_000,
+    genres: ['Sci-Fi'],
     synopsis:
       'Neo-Kyoto, 2189. A fox spirit trapped inside a city-wide AI starts leaving riddles in traffic lights. Hacker-courier Sora is the only one who can read them — and every answer gets someone erased from the grid.',
     palette: ['#22d3ee', '#1e1b4b'], schedule: 'Fri', direction: 'ltr',
-    weeklyScore: 92, monthlyScore: 84, chapterCount: 4, latestDaysAgo: 0.6,
+    chapterCount: 4, latestDaysAgo: 0.6,
   },
 ];
 
@@ -120,4 +120,5 @@ export const latestUpdates = () =>
     .map((s) => ({ series: s, chapter: latestChapter(s) }))
     .filter((x) => x.chapter)
     .sort((a, b) => +new Date(b.chapter.date) - +new Date(a.chapter.date));
+
 

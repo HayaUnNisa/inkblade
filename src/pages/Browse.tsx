@@ -1,15 +1,15 @@
 import { useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Grid3x3, List, Search, SlidersHorizontal, Star, X } from 'lucide-react';
+import { Grid3x3, List, Search, SlidersHorizontal, X } from 'lucide-react';
 import { catalog, genres, latestChapter } from '@/data/catalog';
 import type { Status } from '@/data/types';
-import { cn, compact, timeAgo } from '@/lib/utils';
+import { cn, timeAgo } from '@/lib/utils';
 import SeriesCard from '@/components/SeriesCard';
 import Cover from '@/components/Cover';
 import { SplitHeading } from '@/components/Reveal';
 
-const sorts = { popular: 'Most popular', rating: 'Top rated', updated: 'Recently updated', newest: 'Newest series', az: 'A – Z' } as const;
+const sorts = { updated: 'Recently updated', newest: 'Newest series', az: 'A – Z' } as const;
 type SortKey = keyof typeof sorts;
 const statuses: (Status | 'All')[] = ['All', 'Ongoing', 'Completed', 'Hiatus'];
 
@@ -18,7 +18,8 @@ export default function Browse() {
   const q = params.get('q') ?? '';
   const selected = params.getAll('genre');
   const status = (params.get('status') ?? 'All') as Status | 'All';
-  const sort = (params.get('sort') ?? 'popular') as SortKey;
+  const requestedSort = params.get('sort') ?? 'updated';
+  const sort: SortKey = Object.prototype.hasOwnProperty.call(sorts, requestedSort) ? requestedSort as SortKey : 'updated';
   const view = params.get('view') === 'list' ? 'list' : 'grid';
 
   const update = (fn: (p: URLSearchParams) => void) => {
@@ -42,8 +43,6 @@ export default function Browse() {
         (status === 'All' || s.status === status),
     );
     const by: Record<SortKey, (a: typeof catalog[0], b: typeof catalog[0]) => number> = {
-      popular: (a, b) => b.views - a.views,
-      rating: (a, b) => b.rating - a.rating,
       updated: (a, b) => +new Date(latestChapter(b).date) - +new Date(latestChapter(a).date),
       newest: (a, b) => b.year - a.year,
       az: (a, b) => a.title.localeCompare(b.title),
@@ -147,8 +146,8 @@ export default function Browse() {
                       <p className="text-xs text-muted">{s.author} · {s.year} · {s.status}</p>
                       <p className="mt-2 line-clamp-2 text-sm text-muted">{s.synopsis}</p>
                       <div className="mt-3 flex flex-wrap items-center gap-3 text-xs font-semibold">
-                        <span className="flex items-center gap-1"><Star size={12} className="fill-amber-400 text-amber-400" />{s.rating}</span>
-                        <span className="text-muted">{compact(s.views)} reads</span>
+                        <span>{s.chapters.length} chapters</span>
+                        
                         <span className="text-muted">Ch. {last.number} · {timeAgo(last.date)}</span>
                         <span className="hidden gap-1.5 sm:flex">{s.genres.map((g) => <span key={g} className="rounded-full bg-line/5 px-2 py-0.5">{g}</span>)}</span>
                       </div>

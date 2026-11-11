@@ -1,12 +1,12 @@
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, BookOpen, Calendar, ChevronLeft, ChevronRight, Clock, Eye, Heart, PenTool, Star, TrendingUp, Upload } from 'lucide-react';
+import { ArrowRight, BookOpen, Calendar, ChevronLeft, ChevronRight, Clock, Heart, PenTool, TrendingUp } from 'lucide-react';
 import { catalog, genreKanji, genres, getSeries, latestChapter, latestUpdates, weekdays } from '@/data/catalog';
 import type { Weekday } from '@/data/types';
 import { useTheme } from '@/context/ThemeContext';
 import { useLibrary } from '@/context/LibraryContext';
-import { cn, compact, isNew, timeAgo } from '@/lib/utils';
+import { cn, isNew, timeAgo } from '@/lib/utils';
 import SeriesCard from '../SeriesCard';
 import SectionHeading from '../SectionHeading';
 import Cover from '../Cover';
@@ -55,13 +55,13 @@ export function ContinueReading() {
 /* ─────────── Trending carousel ─────────── */
 export function Trending() {
   const ref = useRef<HTMLDivElement>(null);
-  const list = [...catalog].sort((a, b) => b.weeklyScore - a.weeklyScore);
+  const list = [...catalog].sort((a, b) => +new Date(latestChapter(b).date) - +new Date(latestChapter(a).date));
   const scroll = (d: number) => ref.current?.scrollBy({ left: d * ref.current.clientWidth * 0.8, behavior: 'smooth' });
   return (
     <section className="pt-24">
       <div className="page-x">
         <SectionHeading
-          eyebrow="Hot this week" title="Trending now" jp="熱"
+          eyebrow="Explore the collection" title="Featured stories" jp="熱"
           action={
             <div className="flex gap-2">
               {[[-1, ChevronLeft], [1, ChevronRight]].map(([d, I]) => {
@@ -240,8 +240,8 @@ export function Spotlight() {
           <Rise delay={0.15}>
             <div className="mt-6 flex flex-wrap gap-2">{s.genres.map((g) => <Link key={g} to={`/browse?genre=${g}`} className="chip">{g}</Link>)}</div>
             <dl className="mt-8 grid max-w-lg grid-cols-3 gap-4">
-              {[[Star, s.rating.toFixed(1), 'Rating'], [Eye, compact(s.views), 'Reads'], [Heart, compact(s.follows), 'Follows']].map(([I, v, l]) => {
-                const Icon = I as typeof Star;
+              {[[BookOpen, String(s.chapters.length), 'Chapters'], [BookOpen, String(s.chapters.reduce((n, c) => n + c.pages.length, 0)), 'Pages'], [Calendar, s.status, 'Status']].map(([I, v, l]) => {
+                const Icon = I as typeof BookOpen;
                 return (
                   <div key={l as string} className="rounded-2xl border hairline bg-card/50 p-4">
                     <Icon size={16} className="text-accent" />
@@ -264,24 +264,11 @@ export function Spotlight() {
 
 /* ─────────── Rankings preview ─────────── */
 export function RankingPreview() {
-  const [tab, setTab] = useState<'weeklyScore' | 'monthlyScore'>('weeklyScore');
-  const list = [...catalog].sort((a, b) => b[tab] - a[tab]).slice(0, 5);
-  const max = list[0][tab];
+  const list = [...catalog].sort((a, b) => b.chapters.length - a.chapters.length).slice(0, 5);
+  const max = list[0].chapters.length;
   return (
     <section className="page-x pt-28">
-      <SectionHeading
-        eyebrow="The leaderboard" title="Top ranked" jp="番" to="/rankings"
-        action={
-          <div className="flex rounded-full border hairline p-1">
-            {([['weeklyScore', 'Weekly'], ['monthlyScore', 'Monthly']] as const).map(([k, l]) => (
-              <button key={k} onClick={() => setTab(k)} className={cn('relative rounded-full px-4 py-1.5 text-xs font-bold', tab === k ? 'text-white' : 'text-muted')}>
-                {tab === k && <motion.span layoutId="rank-pill" className="absolute inset-0 rounded-full bg-accent" />}
-                <span className="relative">{l}</span>
-              </button>
-            ))}
-          </div>
-        }
-      />
+      <SectionHeading eyebrow="By published chapter count" title="More to read" jp="番" to="/rankings" />
       <motion.ol layout className="space-y-3">
         {list.map((s, i) => (
           <motion.li layout key={s.slug} transition={{ type: 'spring', stiffness: 300, damping: 30 }}>
@@ -291,10 +278,10 @@ export function RankingPreview() {
               <div className="min-w-0 flex-1">
                 <p className="truncate font-display text-lg font-bold group-hover:text-accent">{s.title}</p>
                 <div className="mt-2 h-1.5 max-w-md overflow-hidden rounded-full bg-line/10">
-                  <motion.div className="h-full rounded-full bg-accent" initial={{ width: 0 }} whileInView={{ width: `${(s[tab] / max) * 100}%` }} viewport={{ once: false }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }} />
+                  <motion.div className="h-full rounded-full bg-accent" initial={{ width: 0 }} whileInView={{ width: `${(s.chapters.length / max) * 100}%` }} viewport={{ once: false }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }} />
                 </div>
               </div>
-              <span className="hidden items-center gap-1.5 text-sm font-semibold text-muted sm:flex"><TrendingUp size={14} className="text-accent" />{s[tab]}</span>
+              <span className="hidden items-center gap-1.5 text-sm font-semibold text-muted sm:flex"><TrendingUp size={14} className="text-accent" />{s.chapters.length} chapters</span>
             </Link>
           </motion.li>
         ))}
@@ -313,12 +300,12 @@ export function CreatorCTA() {
           <div aria-hidden className="absolute inset-y-0 right-0 w-1/2 opacity-60" style={{ backgroundImage: 'var(--hero)', backgroundSize: 'cover', backgroundPosition: 'center 10%', maskImage: 'linear-gradient(to right, transparent, #000)', WebkitMaskImage: 'linear-gradient(to right, transparent, #000)' }} />
           <span aria-hidden className="vertical-jp absolute right-8 top-8 font-brush text-4xl text-accent">創作者</span>
           <div className="relative max-w-xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent">For creators</p>
-            <h2 className="mt-4 font-display text-4xl font-extrabold leading-tight sm:text-5xl">Your story deserves a blade this sharp.</h2>
-            <p className="mt-5 text-base opacity-70">Publish chapters, schedule drops and reach readers who live for the next page. Inkblade is built to showcase your art without compromise.</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent">Behind the stories</p>
+            <h2 className="mt-4 font-display text-4xl font-extrabold leading-tight sm:text-5xl">Three worlds. A new page awaits.</h2>
+            <p className="mt-5 text-base opacity-70">Discover the worlds and creative credits behind InkBlade’s AI-assisted illustrated stories.</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#" className="btn btn-primary"><Upload size={16} /> Submit your series</a>
-              <a href="#" className="btn border border-bg/25 text-bg hover:border-accent"><PenTool size={16} /> Creator guide</a>
+              <Link to="/creators" className="btn btn-primary"><PenTool size={16} /> Creators & credits</Link>
+              <Link to="/about" className="btn border border-bg/25 text-bg hover:border-accent"><BookOpen size={16} /> About InkBlade</Link>
             </div>
           </div>
         </div>

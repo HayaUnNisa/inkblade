@@ -1,9 +1,9 @@
 import { useRef, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { Bookmark, Eye, Star } from 'lucide-react';
+import { Bookmark } from 'lucide-react';
 import type { Series } from '@/data/types';
 import { latestChapter } from '@/data/catalog';
-import { cn, compact, isNew, timeAgo } from '@/lib/utils';
+import { cn, isNew, timeAgo } from '@/lib/utils';
 import { useLibrary } from '@/context/LibraryContext';
 import { useToast } from '@/context/ToastContext';
 import Cover from './Cover';
@@ -53,8 +53,8 @@ export default function SeriesCard({ series, rank, className }: { series: Series
           {/* detail reveal */}
           <div className="absolute inset-x-0 bottom-0 translate-y-3 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-3 pt-10 text-white opacity-0 transition-all duration-500 ease-silk group-hover:translate-y-0 group-hover:opacity-100">
             <div className="flex items-center gap-3 text-[11px] font-semibold">
-              <span className="flex items-center gap-1"><Star size={12} className="fill-amber-400 text-amber-400" />{series.rating.toFixed(1)}</span>
-              <span className="flex items-center gap-1"><Eye size={12} />{compact(series.views)}</span>
+              <span>{series.chapters.length} chapters</span>
+              
               <span className="ml-auto opacity-80">Ch. {last?.number}</span>
             </div>
             <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed opacity-80">{series.synopsis}</p>

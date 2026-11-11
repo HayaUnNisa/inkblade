@@ -18,13 +18,19 @@ const terms = [
   ['Changes and your rights', 'These terms may be updated as the website develops. The date on this page identifies the latest version. Nothing in these terms is intended to remove rights that cannot be excluded under applicable law.'],
 ];
 
-export default function Information({ kind }: { kind: 'privacy' | 'terms' | 'creators' }) {
-  const title = kind === 'privacy' ? 'Privacy policy' : kind === 'terms' ? 'Terms & conditions' : 'Creators & credits';
+export default function Information({ kind }: { kind: 'privacy' | 'terms' | 'creators' | 'about' }) {
+  const title = kind === 'about' ? 'About InkBlade' : kind === 'privacy' ? 'Privacy policy' : kind === 'terms' ? 'Terms & conditions' : 'Creators & credits';
   return <div className="page-x pb-12 pt-32">
     <article className="mx-auto max-w-3xl">
       <p className="eyebrow">InkBlade</p>
       <h1 className="mt-4 font-display text-4xl font-extrabold sm:text-5xl">{title}</h1>
-      {kind === 'creators' ? <>
+      {kind === 'about' ? <div className="mt-8 space-y-6 leading-8 text-muted">
+        <p>InkBlade is a growing collection of fictional, AI-assisted illustrated stories. Read published chapters in your browser, switch between light and dark themes, and save your place in a local reading library without an account.</p>
+        <p>Crimson Moonblade follows an exiled swordsman whose blade consumes memories. Sakura Oathkeeper explores a guardian’s promise to a castle that appears at dawn. Neon Kitsune takes the mystery to a future city, where a hacker-courier deciphers messages from a fox spirit trapped in an AI.</p>
+        <p>Artwork and story material are developed with AI assistance. The names in our series credits are creative catalog names. Our collection is still developing; chapter counts reflect the pages currently available, and release plans may change.</p>
+        <p>Bookmarks, reading progress and preferences stay in your current browser. We do not currently offer reader accounts, public ratings, creator submissions or an email newsletter.</p>
+        <Link className="inline-block text-accent" to="/browse">Explore the three series →</Link>
+      </div> : kind === 'creators' ? <>
         <p className="mt-6 leading-relaxed text-muted">Explore the credits listed for our three published series. These are the creative names used in the catalog; the stories and illustrations include AI-assisted material.</p>
         <div className="mt-8 space-y-4">{catalog.map(s => <section key={s.slug} className="rounded-2xl border hairline bg-card/40 p-6">
           <h2 className="font-display text-2xl font-bold"><Link className="hover:text-accent" to={`/series/${s.slug}`}>{s.title}</Link></h2>
@@ -34,7 +40,7 @@ export default function Information({ kind }: { kind: 'privacy' | 'terms' | 'cre
       </> : <div className="mt-8 space-y-8">{(kind === 'privacy' ? privacy : terms).map(([heading, body]) => <section key={heading}>
         <h2 className="font-display text-2xl font-bold">{heading}</h2><p className="mt-3 leading-8 text-muted">{body}</p>
       </section>)}{kind === 'privacy' && <p className="leading-8 text-muted">More about external font requests: <a className="text-accent underline" href="https://developers.google.com/fonts/faq/privacy">Google Fonts privacy information</a>.</p>}</div>}
-      <nav aria-label="Information pages" className="mt-12 flex flex-wrap gap-6 border-t hairline pt-6 text-accent"><Link to="/browse">Browse comics</Link><Link to="/privacy">Privacy policy</Link><Link to="/terms">Terms & conditions</Link><Link to="/creators">Creators</Link></nav>
+      <nav aria-label="Information pages" className="mt-12 flex flex-wrap gap-6 border-t hairline pt-6 text-accent"><Link to="/about">About</Link><Link to="/browse">Browse comics</Link><Link to="/privacy">Privacy policy</Link><Link to="/terms">Terms & conditions</Link><Link to="/creators">Creators</Link></nav>
     </article>
   </div>;
 }

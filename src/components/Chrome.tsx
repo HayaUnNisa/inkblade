@@ -1,7 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+
+export function FooterScrollReset() {
+  const location = useLocation();
+  useLayoutEffect(() => {
+    if (location.state?.scrollToTop) window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+  }, [location.key, location.state]);
+  return null;
+}
 
 /** Thin accent reading-progress bar for the whole page. */
 export function ScrollProgress() {

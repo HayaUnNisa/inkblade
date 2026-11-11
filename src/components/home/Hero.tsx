@@ -1,7 +1,7 @@
 import { useEffect, useState, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion';
-import { ArrowRight, BookOpen, Play, Star } from 'lucide-react';
+import { ArrowRight, BookOpen, Play } from 'lucide-react';
 import { catalog, latestChapter } from '@/data/catalog';
 import { useTheme } from '@/context/ThemeContext';
 import { compact } from '@/lib/utils';
@@ -11,7 +11,7 @@ import Cover from '../Cover';
 
 const featured = catalog.filter((s) => s.featured);
 const totalChapters = catalog.reduce((n, s) => n + s.chapters.length, 0);
-const totalViews = catalog.reduce((n, s) => n + s.views, 0);
+const totalPages = catalog.reduce((n, s) => n + s.chapters.reduce((total, c) => total + c.pages.length, 0), 0);
 
 export default function Hero() {
   const { theme } = useTheme();
@@ -106,7 +106,7 @@ export default function Hero() {
             {[
               ['Series', <Counter key="a" to={catalog.length} />],
               ['Chapters', <Counter key="b" to={totalChapters} />],
-              ['Reads', <Counter key="c" to={totalViews} format={(n) => compact(n)} />],
+              ['Pages', <Counter key="c" to={totalPages} format={(n) => compact(n)} />],
             ].map(([l, v]) => (
               <div key={l as string}>
                 <dt className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted">{l}</dt>
@@ -129,7 +129,7 @@ export default function Hero() {
                   <p className="mt-1 truncate font-display text-lg font-bold group-hover:text-accent">{f.title}</p>
                   <p className="truncate text-xs text-muted">{f.genres.join(' · ')}</p>
                   <div className="mt-2 flex items-center gap-3 text-xs font-semibold">
-                    <span className="flex items-center gap-1"><Star size={12} className="fill-amber-400 text-amber-400" />{f.rating}</span>
+                    <span className="flex items-center gap-1"><BookOpen size={12} />{f.chapters.length} chapters</span>
                     <span className="text-muted">Ch. {fLast.number}</span>
                     <ArrowRight size={14} className="ml-auto text-accent transition-transform group-hover:translate-x-1" />
                   </div>

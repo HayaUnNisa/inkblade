@@ -29,10 +29,6 @@ export interface Series {
   status: Status;
   year: number;
   genres: string[];
-  rating: number;
-  /** Total reads */
-  views: number;
-  follows: number;
   synopsis: string;
   /** Optional cover image URL. When missing, an original generated cover is drawn. */
   cover?: string;
@@ -45,8 +41,5 @@ export interface Series {
   /** Default reading direction for this series */
   direction: 'rtl' | 'ltr' | 'vertical';
   featured?: boolean;
-  /** Ranking scores (higher = better) */
-  weeklyScore: number;
-  monthlyScore: number;
   chapters: Chapter[];
 }

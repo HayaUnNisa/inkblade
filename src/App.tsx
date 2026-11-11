@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { SlashFlash } from '@/components/ThemeToggle';
-import { BackToTop, RouteCurtain, ScrollProgress } from '@/components/Chrome';
+import { BackToTop, RouteCurtain, ScrollProgress, FooterScrollReset } from '@/components/Chrome';
 import Home from '@/pages/Home';
 
 const Browse = lazy(() => import('@/pages/Browse'));
@@ -39,7 +39,7 @@ export default function App() {
     <div className="grain relative min-h-screen">
       {!reading && <ScrollProgress />}
       {!reading && <Navbar />}
-      <RouteCurtain />
+      <RouteCurtain /><FooterScrollReset />
       <SlashFlash />
       <Suspense fallback={<Loader />}>
         <Routes location={location} key={location.pathname}>
@@ -49,7 +49,7 @@ export default function App() {
           <Route path="/read/:slug/:chapter" element={<Reader />} />
           <Route path="/library" element={<Page><LibraryPage /></Page>} />
           <Route path="/rankings" element={<Page><Rankings /></Page>} />
-          <Route path="/privacy" element={<Page><Information kind="privacy" /></Page>} />
+          <Route path="/about" element={<Page><Information kind="about" /></Page>} /><Route path="/privacy" element={<Page><Information kind="privacy" /></Page>} />
           <Route path="/terms" element={<Page><Information kind="terms" /></Page>} />
           <Route path="/creators" element={<Page><Information kind="creators" /></Page>} />
           <Route path="*" element={<Page><NotFound /></Page>} />
@@ -60,3 +60,4 @@ export default function App() {
     </div>
   );
 }
+

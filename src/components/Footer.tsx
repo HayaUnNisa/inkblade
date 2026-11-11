@@ -26,7 +26,7 @@ export default function Footer() {
             <h4 className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted">Explore</h4>
             <ul className="mt-5 space-y-3 text-sm font-medium">
               {[['Browse', '/browse'], ['Latest updates', '/browse?sort=updated'], ['Rankings', '/rankings'], ['My library', '/library']].map(([l, to]) => (
-                <li key={to}><Link to={to} className="transition-colors hover:text-accent">{l}</Link></li>
+                <li key={to}><Link state={{ scrollToTop: true }} to={to} className="transition-colors hover:text-accent">{l}</Link></li>
               ))}
             </ul>
           </div>
@@ -34,18 +34,18 @@ export default function Footer() {
             <h4 className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted">Genres</h4>
             <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 text-sm font-medium">
               {['Action', 'Fantasy', 'Sci-Fi'].filter((g) => genres.includes(g)).map((g) => (
-                <li key={g}><Link to={`/browse?genre=${encodeURIComponent(g)}`} className="transition-colors hover:text-accent">{g}</Link></li>
+                <li key={g}><Link state={{ scrollToTop: true }} to={`/browse?genre=${encodeURIComponent(g)}`} className="transition-colors hover:text-accent">{g}</Link></li>
               ))}
             </ul>
           </div>
           <div>
-            <h4 className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted">Keep reading</h4><p className="mt-5 text-sm text-muted">Find the newest chapters, or save a series to your library to return to it later.</p><Link to="/browse?sort=updated" className="btn btn-primary mt-4">View latest chapters <ArrowRight size={16} /></Link>
+            <h4 className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted">Keep reading</h4><p className="mt-5 text-sm text-muted">Find the newest chapters, or save a series to your library to return to it later.</p><Link state={{ scrollToTop: true }} to="/browse?sort=updated" className="btn btn-primary mt-4">View latest chapters <ArrowRight size={16} /></Link>
           </div>
         </div>
         <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t hairline pt-6 text-xs text-muted sm:flex-row sm:items-center">
           <p>© {new Date().getFullYear()} Inkblade. Stories and artwork presented on InkBlade.</p>
-          <div className="flex flex-wrap gap-6">
-            <Link to="/terms" className="hover:text-ink">Terms &amp; conditions</Link><Link to="/privacy" className="hover:text-ink">Privacy policy</Link><Link to="/creators" className="hover:text-ink">Creators</Link>
+          <div className="flex flex-wrap gap-6"><Link state={{ scrollToTop: true }} to="/about" className="hover:text-ink">About</Link>
+            <Link state={{ scrollToTop: true }} to="/terms" className="hover:text-ink">Terms &amp; conditions</Link><Link state={{ scrollToTop: true }} to="/privacy" className="hover:text-ink">Privacy policy</Link><Link state={{ scrollToTop: true }} to="/creators" className="hover:text-ink">Creators</Link>
           </div>
         </div>
         <p aria-hidden className="pointer-events-none mt-10 select-none text-center font-display text-[18vw] font-extrabold leading-[0.8] tracking-tighter text-stroke opacity-60 lg:text-[13rem]">
@@ -55,5 +55,6 @@ export default function Footer() {
     </footer>
   );
 }
+
 
 

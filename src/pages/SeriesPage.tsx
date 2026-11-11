@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowDownUp, BookOpen, Bookmark, CheckCircle2, Eye, Heart, Play, Search, Share2, Star } from 'lucide-react';
+import { ArrowDownUp, BookOpen, Bookmark, CheckCircle2, Play, Search, Share2 } from 'lucide-react';
 import { catalog, getSeries, latestChapter } from '@/data/catalog';
 import { useLibrary } from '@/context/LibraryContext';
 import { useToast } from '@/context/ToastContext';
-import { cn, compact, formatDate, isNew, timeAgo } from '@/lib/utils';
+import { cn, formatDate, isNew, timeAgo } from '@/lib/utils';
 import Cover from '@/components/Cover';
 import SeriesCard from '@/components/SeriesCard';
 import SectionHeading from '@/components/SectionHeading';
@@ -76,8 +76,8 @@ export default function SeriesPage() {
               <p className="mt-3 text-sm text-muted">Story by <span className="font-semibold text-ink">{s.author}</span>{s.artist !== s.author && <> · Art by <span className="font-semibold text-ink">{s.artist}</span></>}</p>
               <div className="mt-5 flex flex-wrap gap-2">{s.genres.map((g) => <Link key={g} to={`/browse?genre=${encodeURIComponent(g)}`} className="chip">{g}</Link>)}</div>
               <dl className="mt-6 flex flex-wrap gap-6 text-sm">
-                {[[Star, s.rating.toFixed(1), 'rating'], [Eye, compact(s.views), 'reads'], [Heart, compact(s.follows), 'follows'], [BookOpen, s.chapters.length, 'chapters']].map(([I, v, l]) => {
-                  const Icon = I as typeof Star;
+                {[[BookOpen, s.chapters.length, 'chapters'], [BookOpen, s.chapters.reduce((n, c) => n + c.pages.length, 0), 'pages']].map(([I, v, l]) => {
+                  const Icon = I as typeof BookOpen;
                   return <div key={l as string} className="flex items-center gap-2"><Icon size={16} className="text-accent" /><dd className="font-bold">{v as string}</dd><dt className="text-muted">{l as string}</dt></div>;
                 })}
               </dl>
