@@ -45,6 +45,7 @@ export default function Footer() {
         <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t hairline pt-6 text-xs text-muted sm:flex-row sm:items-center">
           <p>© {new Date().getFullYear()} Inkblade. Stories and artwork presented on InkBlade.</p>
           <div className="flex flex-wrap gap-6"><Link state={{ scrollToTop: true }} to="/about" className="hover:text-ink">About</Link>
+            <Link state={{ scrollToTop: true }} to="/contact" className="hover:text-ink">Contact & feedback</Link>
             <Link state={{ scrollToTop: true }} to="/terms" className="hover:text-ink">Terms &amp; conditions</Link><Link state={{ scrollToTop: true }} to="/privacy" className="hover:text-ink">Privacy policy</Link><Link state={{ scrollToTop: true }} to="/creators" className="hover:text-ink">Creators</Link>
           </div>
         </div>

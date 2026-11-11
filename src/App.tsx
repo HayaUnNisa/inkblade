@@ -13,6 +13,7 @@ const Reader = lazy(() => import('@/pages/Reader'));
 const LibraryPage = lazy(() => import('@/pages/LibraryPage'));
 const Rankings = lazy(() => import('@/pages/Rankings'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
+const Contact = lazy(() => import('@/pages/Contact'));
 const Information = lazy(() => import('@/pages/Information'));
 
 function Page({ children }: { children: ReactNode }) {
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="/read/:slug/:chapter" element={<Reader />} />
           <Route path="/library" element={<Page><LibraryPage /></Page>} />
           <Route path="/rankings" element={<Page><Rankings /></Page>} />
+          <Route path="/contact" element={<Page><Contact /></Page>} />
           <Route path="/about" element={<Page><Information kind="about" /></Page>} /><Route path="/privacy" element={<Page><Information kind="privacy" /></Page>} />
           <Route path="/terms" element={<Page><Information kind="terms" /></Page>} />
           <Route path="/creators" element={<Page><Information kind="creators" /></Page>} />

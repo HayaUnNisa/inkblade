@@ -159,6 +159,8 @@ export default function SeriesPage() {
         </AnimatePresence>
       </section>
 
+      <section className="page-x pt-12"><div className="rounded-2xl border hairline bg-card/40 p-6"><h2 className="font-display text-2xl font-bold">What did you think?</h2><p className="mt-2 text-muted">Share your opinion or report a chapter issue privately with the InkBlade team.</p><Link to={`/contact?series=${encodeURIComponent(s.slug)}`} className="btn btn-ghost mt-4">Share feedback</Link></div></section>
+
       {related.length > 0 && (
         <section className="page-x pt-24">
           <SectionHeading eyebrow="If you liked this" title="You may also like" jp="似" />
