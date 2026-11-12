@@ -1,3 +1,4 @@
+import crimsonChapter08 from './crimson-chapter-08.json';
 import neonChapters from './neon-chapters.json';
 import sakuraChapters from './sakura-chapters.json';
 import type { Chapter, Series, Weekday } from './types';
@@ -101,6 +102,8 @@ export const catalog: Series[] = seeds.map(({ chapterCount, latestDaysAgo, every
       : chapter,
   ),
 }));
+
+catalog.find(s => s.slug === 'crimson-moonblade')!.chapters.push(crimsonChapter08);
 
 export const genres = Array.from(new Set(catalog.flatMap((s) => s.genres))).sort();
 

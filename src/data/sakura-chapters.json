@@ -102,5 +102,18 @@
       "/comics/sakura-oathkeeper/8/005.webp",
       "/comics/sakura-oathkeeper/8/006.webp"
     ]
+  },
+  {
+    "number": 9,
+    "title": "The Road Beyond Dawn",
+    "date": "2026-11-12T17:25:46.494478+00:00",
+    "pages": [
+      "/comics/sakura-oathkeeper/9/001.webp",
+      "/comics/sakura-oathkeeper/9/002.webp",
+      "/comics/sakura-oathkeeper/9/003.webp",
+      "/comics/sakura-oathkeeper/9/004.webp",
+      "/comics/sakura-oathkeeper/9/005.webp",
+      "/comics/sakura-oathkeeper/9/006.webp"
+    ]
   }
 ]

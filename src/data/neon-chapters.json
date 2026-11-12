@@ -50,5 +50,18 @@
       "/comics/neon-kitsune/4/005.webp",
       "/comics/neon-kitsune/4/006.webp"
     ]
+  },
+  {
+    "number": 5,
+    "title": "A Broken Lantern",
+    "date": "2026-11-12T17:25:46.494478+00:00",
+    "pages": [
+      "/comics/neon-kitsune/5/001.webp",
+      "/comics/neon-kitsune/5/002.webp",
+      "/comics/neon-kitsune/5/003.webp",
+      "/comics/neon-kitsune/5/004.webp",
+      "/comics/neon-kitsune/5/005.webp",
+      "/comics/neon-kitsune/5/006.webp"
+    ]
   }
 ]
