@@ -16,13 +16,19 @@ type Mode = 'single' | 'double' | 'vertical';
 type Dir = 'rtl' | 'ltr';
 interface Settings { mode: Mode; dir: Dir; fit: 'height' | 'width'; zoom: number; gap: boolean }
 
-const SKEY = 'inkblade-reader-v1';
+const SKEY = 'inkblade-reader-v2';
 const loadSettings = (slug: string | undefined, fallbackDir: Dir, fallbackMode: Mode): Settings => {
-  let settings: Settings = { mode: fallbackMode, dir: fallbackDir, fit: 'height', zoom: 100, gap: true };
+  let settings: Settings = { mode: fallbackMode, dir: fallbackDir, fit: 'width', zoom: 100, gap: true };
   try {
     const saved = localStorage.getItem(SKEY);
-    if (saved) settings = { ...settings, ...JSON.parse(saved), dir: fallbackDir };
-    const dir = localStorage.getItem(`${SKEY}:direction:${slug}`);
+    if (saved) {
+      const value = JSON.parse(saved);
+      if (['vertical', 'single', 'double'].includes(value.mode)) settings.mode = value.mode;
+      if (['height', 'width'].includes(value.fit)) settings.fit = value.fit;
+      if (Number.isFinite(value.zoom)) settings.zoom = Math.min(200, Math.max(50, value.zoom));
+      if (typeof value.gap === 'boolean') settings.gap = value.gap;
+    }
+    const dir = localStorage.getItem(`${SKEY}:direction:${slug}`) ?? localStorage.getItem(`inkblade-reader-v1:direction:${slug}`);
     if (dir === 'rtl' || dir === 'ltr') settings.dir = dir;
   } catch { /* use series defaults */ }
   return settings;
@@ -39,14 +45,14 @@ export default function Reader() {
   const { saveProgress } = useLibrary();
 
   const [settings, setSettings] = useState<Settings>(() =>
-    loadSettings(slug, series?.direction === 'ltr' ? 'ltr' : 'rtl', series?.direction === 'vertical' ? 'vertical' : 'single'));
+    loadSettings(slug, series?.direction === 'ltr' ? 'ltr' : 'rtl', 'vertical'));
   useEffect(() => {
-    setSettings(loadSettings(slug, series?.direction === 'ltr' ? 'ltr' : 'rtl', series?.direction === 'vertical' ? 'vertical' : 'single'));
+    setSettings(loadSettings(slug, series?.direction === 'ltr' ? 'ltr' : 'rtl', 'vertical'));
   }, [slug, series?.direction]);
   useEffect(() => { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch { /* ignore */ } }, [settings]);
   const set = <K extends keyof Settings>(k: K, v: Settings[K]) => {
     if (k === 'dir') { try { localStorage.setItem(`${SKEY}:direction:${slug}`, String(v)); } catch { /* ignore */ } }
-    setSettings((s) => ({ ...s, [k]: v }));
+    setSettings((s) => ({ ...s, [k]: v, ...(k === 'zoom' ? { fit: 'width' as const } : {}) }));
   };
 
   const pages = useMemo(() => {
@@ -56,31 +62,20 @@ export default function Reader() {
   const total = pages.length;
   const step = settings.mode === 'double' ? 2 : 1;
 
-  const [page, setPage] = useState(() => Math.min(Number(params.get('page') ?? 0) || 0, Math.max(0, total - 1)));
+  const [page, setPage] = useState(() => Math.max(0, Math.min(Number(params.get('page') ?? 0) || 0, total - 1)));
   const [dirSign, setDirSign] = useState(1);
-  const [ui, setUi] = useState(true);
   const [panel, setPanel] = useState<null | 'settings' | 'pages'>(null);
   const [ended, setEnded] = useState(false);
   const [full, setFull] = useState(false);
-  const idle = useRef<number>();
   const scroller = useRef<HTMLDivElement>(null);
 
   // reset on chapter change
-  useEffect(() => { setPage(Math.min(Number(params.get('page') ?? 0) || 0, Math.max(0, total - 1))); setEnded(false); }, [slug, chNum]); // eslint-disable-line
+  useEffect(() => { setPage(Math.max(0, Math.min(Number(params.get('page') ?? 0) || 0, total - 1))); setEnded(false); }, [slug, chNum]); // eslint-disable-line
 
   // save progress
   useEffect(() => {
     if (series && ch) saveProgress({ slug: series.slug, chapter: ch.number, page: ended ? total - 1 : page, total });
   }, [page, ended, series, ch, total, saveProgress]);
-
-  // auto-hide UI
-  const poke = useCallback(() => {
-    setUi(true);
-    window.clearTimeout(idle.current);
-    idle.current = window.setTimeout(() => setUi(false), 2800);
-  }, []);
-  useEffect(() => { poke(); return () => window.clearTimeout(idle.current); }, [poke]);
-  const uiVisible = ui || panel !== null || ended;
 
   const prevCh = series && chIndex > 0 ? series.chapters[chIndex - 1] : undefined;
   const nextCh = series && chIndex < series.chapters.length - 1 ? series.chapters[chIndex + 1] : undefined;
@@ -111,7 +106,7 @@ export default function Reader() {
   // keyboard
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (/input|select|textarea/i.test((e.target as HTMLElement).tagName)) return;
+      if (/input|select|textarea|button|a/i.test((e.target as HTMLElement).tagName)) return;
       const rtl = settings.dir === 'rtl' && settings.mode !== 'vertical';
       if (e.key === 'ArrowRight' || e.key === 'd') { e.preventDefault(); rtl ? back() : forward(); }
       else if (e.key === 'ArrowLeft' || e.key === 'a') { e.preventDefault(); rtl ? forward() : back(); }
@@ -119,22 +114,29 @@ export default function Reader() {
       else if (e.key === 'PageUp') { e.preventDefault(); back(); }
       else if (e.key === 'f') toggleFull();
       else if (e.key === 'Escape') { if (panel) setPanel(null); else if (series) nav(`/series/${series.slug}`); }
-      poke();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [forward, back, settings.dir, settings.mode, panel, series, nav, poke]);
+  }, [forward, back, settings.dir, settings.mode, panel, series, nav]);
 
-  // vertical mode: track current page
+  // Track the page crossing the top quarter of the viewport, even for tall pages.
   useEffect(() => {
-    if (settings.mode !== 'vertical' || !scroller.current) return;
-    const els = scroller.current.querySelectorAll('[data-page]');
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((en) => { if (en.isIntersecting) setPage(Number((en.target as HTMLElement).dataset.page)); });
-    }, { root: scroller.current, threshold: 0.5 });
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, [settings.mode, pages]);
+    const root = scroller.current;
+    if (settings.mode !== 'vertical' || !root) return;
+    const target = root.querySelector<HTMLElement>(`[data-page="${page}"]`);
+    root.scrollTop = target ? target.offsetTop : 0;
+    const track = () => {
+      const line = root.getBoundingClientRect().top + root.clientHeight * 0.25;
+      const elements = Array.from(root.querySelectorAll<HTMLElement>('[data-page]'));
+      let current = 0;
+      elements.forEach((el, i) => { if (el.getBoundingClientRect().top <= line) current = i; });
+      setPage(current);
+    };
+    root.addEventListener('scroll', track, { passive: true });
+    window.addEventListener('resize', track);
+    track();
+    return () => { root.removeEventListener('scroll', track); window.removeEventListener('resize', track); };
+  }, [settings.mode, slug, chNum]); // Page changes while scrolling must not trigger a jump.
 
   // preload upcoming images
   useEffect(() => {
@@ -150,7 +152,7 @@ export default function Reader() {
   const renderPage = (i: number, cls = '') => {
     const src = pages[i];
     return src ? (
-      <img src={src} alt={`Page ${i + 1}`} className={cn('select-none object-contain', cls)} draggable={false} />
+      <img src={src} alt={`${series.title}, chapter ${ch.number}, page ${i + 1}`} width={1024} height={1536} loading={i === page ? "eager" : "lazy"} decoding="async" className={cn('select-none object-contain', cls)} draggable={false} />
     ) : (
       <div className={cn('aspect-[2/3]', cls)}>
         <PlaceholderPage seed={`${series.slug}-${ch.number}`} page={i} total={total} accent={series.palette[0]} title={series.title} kanji={series.kanji} />
@@ -158,21 +160,21 @@ export default function Reader() {
     );
   };
 
-  const fitCls = settings.fit === 'height' ? 'h-[100svh] w-auto max-w-full' : 'w-full h-auto';
+  const fitCls = settings.fit === 'height' ? 'h-[calc(100svh-180px)] w-auto max-w-full' : 'w-full h-auto';
   const goChapter = (n: number) => nav(`/read/${series.slug}/${n}`);
 
   return (
-    <div className="fixed inset-0 bg-[#0a0a0f] text-white" onMouseMove={poke} onTouchStart={poke}>
+    <div className="fixed inset-0 flex flex-col bg-[#0a0a0f] text-white">
       {/* stage */}
       {settings.mode === 'vertical' ? (
-        <div ref={scroller} className="h-full overflow-y-auto" onClick={() => setUi((u) => !u)}>
-          <div className="mx-auto flex flex-col items-center" style={{ width: `min(100%, ${settings.zoom * 7.2}px)`, gap: settings.gap ? 12 : 0 }}>
+        <div ref={scroller} className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain" tabIndex={0} aria-label="Chapter pages">
+          <div className="mx-auto flex flex-col items-center py-4" style={{ width: `min(100%, ${settings.zoom * 10}px)`, gap: settings.gap ? 20 : 0 }}>
             {pages.map((_, i) => <div key={i} data-page={i} className="w-full">{renderPage(i, 'w-full h-auto')}</div>)}
           </div>
-          <EndCard series={series} next={nextCh} onNext={() => nextCh && goChapter(nextCh.number)} inline />
+          <EndCard series={series} previous={prevCh} next={nextCh} onNext={() => nextCh && goChapter(nextCh.number)} inline />
         </div>
       ) : (
-        <div className="relative flex h-full items-center justify-center overflow-auto">
+        <div className="relative flex min-h-0 flex-1 items-start justify-center overflow-auto py-4">
           <AnimatePresence mode="popLayout" custom={dirSign} initial={false}>
             <motion.div
               key={page}
@@ -184,44 +186,44 @@ export default function Reader() {
               }}
               initial="enter" animate="center" exit="exit"
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              className="flex items-center justify-center"
-              style={{ transformPerspective: 1400, scale: settings.zoom / 100, gap: settings.gap && settings.mode === 'double' ? 6 : 0 }}
+              className="flex items-start justify-center"
+              style={{ transformPerspective: 1400, width: settings.fit === 'width' ? `min(100%, ${settings.zoom * 10}px)` : undefined, gap: settings.gap && settings.mode === 'double' ? 6 : 0 }}
             >
               {ordered.map((i) => (
                 <div key={i} className={cn('shadow-[0_30px_80px_-20px_rgb(0_0_0/0.8)]', settings.mode === 'double' && 'max-w-[50vw]')}>
-                  {renderPage(i, settings.mode === 'double' ? (settings.fit === 'height' ? 'h-[100svh] w-auto max-w-[50vw]' : 'w-[50vw] h-auto') : fitCls)}
+                  {renderPage(i, settings.mode === 'double' ? (settings.fit === 'height' ? 'h-[calc(100svh-180px)] w-auto max-w-[50vw]' : 'w-[50vw] h-auto') : fitCls)}
                 </div>
               ))}
             </motion.div>
           </AnimatePresence>
           {/* click zones */}
           <button aria-label="Previous / next" className="absolute inset-y-0 left-0 w-[35%] cursor-w-resize" onClick={() => (settings.dir === 'rtl' ? forward() : back())} />
-          <button aria-label="Toggle controls" className="absolute inset-y-0 left-[35%] w-[30%] cursor-pointer" onClick={() => setUi((u) => !u)} />
           <button aria-label="Next / previous" className="absolute inset-y-0 right-0 w-[35%] cursor-e-resize" onClick={() => (settings.dir === 'rtl' ? back() : forward())} />
-          <AnimatePresence>{ended && <EndCard series={series} next={nextCh} onNext={() => nextCh && goChapter(nextCh.number)} onClose={() => setEnded(false)} />}</AnimatePresence>
+          <AnimatePresence>{ended && <EndCard series={series} previous={prevCh} next={nextCh} onNext={() => nextCh && goChapter(nextCh.number)} onClose={() => setEnded(false)} />}</AnimatePresence>
         </div>
       )}
 
       {/* top bar */}
       <motion.header
-        animate={{ y: uiVisible ? 0 : -90, opacity: uiVisible ? 1 : 0 }}
+        animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute inset-x-0 top-0 z-20 bg-gradient-to-b from-black/85 to-transparent px-3 pb-10 pt-3 sm:px-5"
+        className="relative order-first z-20 shrink-0 border-b border-white/10 bg-neutral-950 px-3 py-3 sm:px-5"
       >
         <div className="flex items-center gap-3">
           <Link to={`/series/${series.slug}`} className="grid h-10 w-10 place-items-center rounded-full bg-white/10 backdrop-blur transition hover:bg-white/20" aria-label="Back to series"><ArrowLeft size={18} /></Link>
-          <div className="min-w-0 flex-1">
+          <div className="hidden min-w-0 flex-1 sm:block">
             <p className="truncate font-display text-base font-bold sm:text-lg">{series.title}</p>
             <p className="truncate text-xs text-white/60">Chapter {ch.number} · {ch.title}</p>
           </div>
           <select
             value={ch.number}
             onChange={(e) => goChapter(Number(e.target.value))}
-            className="hidden max-w-[180px] cursor-pointer rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold text-white outline-none backdrop-blur sm:block"
+            className="max-w-[100px] sm:max-w-[210px] cursor-pointer rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold text-white outline-none backdrop-blur"
             aria-label="Choose chapter"
           >
             {[...series.chapters].reverse().map((c) => <option key={c.number} value={c.number} className="bg-neutral-900">Ch. {c.number} — {c.title}</option>)}
           </select>
+          <select aria-label="Reading layout" value={settings.mode} onChange={e => set('mode', e.target.value as Mode)} className="ml-auto max-w-[120px] rounded-lg border border-white/15 bg-neutral-900 px-2 py-2 text-xs"><option value="vertical">Scroll pages</option><option value="single">Single page</option><option value="double">Two pages</option></select>
           <button onClick={() => setPanel(panel === 'pages' ? null : 'pages')} className={cn('grid h-10 w-10 place-items-center rounded-full backdrop-blur transition', panel === 'pages' ? 'bg-accent' : 'bg-white/10 hover:bg-white/20')} aria-label="All pages"><LayoutGrid size={17} /></button>
           <button onClick={() => setPanel(panel === 'settings' ? null : 'settings')} className={cn('grid h-10 w-10 place-items-center rounded-full backdrop-blur transition', panel === 'settings' ? 'bg-accent' : 'bg-white/10 hover:bg-white/20')} aria-label="Reader settings"><Settings2 size={17} /></button>
           <button onClick={toggleFull} className="hidden h-10 w-10 place-items-center rounded-full bg-white/10 backdrop-blur transition hover:bg-white/20 sm:grid" aria-label="Fullscreen">{full ? <Shrink size={17} /> : <Expand size={17} />}</button>
@@ -230,9 +232,9 @@ export default function Reader() {
 
       {/* bottom bar */}
       <motion.footer
-        animate={{ y: uiVisible ? 0 : 110, opacity: uiVisible ? 1 : 0 }}
+        animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black/90 to-transparent px-3 pb-4 pt-12 sm:px-6"
+        className="relative order-last z-20 shrink-0 border-t border-white/10 bg-neutral-950 px-3 py-3 sm:px-6"
       >
         <div className="mx-auto flex max-w-3xl items-center gap-3">
           <button disabled={!prevCh} onClick={() => prevCh && goChapter(prevCh.number)} className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/10 transition hover:bg-white/20 disabled:opacity-30" aria-label="Previous chapter"><ChevronLeft size={18} /></button>
@@ -262,10 +264,10 @@ export default function Reader() {
       <AnimatePresence>
         {panel === 'settings' && (
           <motion.aside initial={{ x: 40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 40, opacity: 0 }} transition={{ type: 'spring', stiffness: 360, damping: 34 }}
-            className="absolute right-3 top-20 z-30 w-[300px] rounded-2xl border border-white/10 bg-neutral-950/90 p-5 backdrop-blur-xl sm:right-5">
+            className="absolute right-3 top-20 z-30 max-h-[calc(100svh-180px)] overflow-y-auto w-[min(300px,calc(100vw-24px))] rounded-2xl border border-white/10 bg-neutral-950/90 p-5 backdrop-blur-xl sm:right-5">
             <div className="flex items-center justify-between"><p className="font-display text-lg font-bold">Reader settings</p><button onClick={() => setPanel(null)} aria-label="Close"><X size={18} /></button></div>
             <Group label="Layout">
-              {([['single', 'Single', RectangleVertical], ['double', 'Spread', Columns2], ['vertical', 'Webtoon', GalleryVertical]] as const).map(([v, l, I]) => (
+              {([['single', 'Single', RectangleVertical], ['double', 'Spread', Columns2], ['vertical', 'Scroll', GalleryVertical]] as const).map(([v, l, I]) => (
                 <Opt key={v} on={settings.mode === v} onClick={() => set('mode', v)}><I size={15} />{l}</Opt>
               ))}
             </Group>
@@ -278,7 +280,7 @@ export default function Reader() {
               <Opt on={settings.fit === 'width'} onClick={() => set('fit', 'width')}>Width</Opt>
             </Group>
             <div className="mt-5">
-              <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.25em] text-white/50">Zoom · {settings.zoom}%</p>
+              <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.25em] text-white/50">{settings.mode === 'vertical' || settings.fit === 'width' ? 'Page width' : 'Zoom'} · {settings.zoom}%</p>
               <div className="flex items-center gap-2">
                 <button onClick={() => set('zoom', Math.max(50, settings.zoom - 10))} className="grid h-8 w-8 place-items-center rounded-lg bg-white/10" aria-label="Zoom out"><Minus size={14} /></button>
                 <input type="range" min={50} max={200} step={10} value={settings.zoom} onChange={(e) => set('zoom', Number(e.target.value))} className="flex-1 accent-[rgb(var(--accent))]" aria-label="Zoom" />
@@ -331,8 +333,8 @@ function Opt({ on, onClick, children }: { on: boolean; onClick: () => void; chil
   );
 }
 
-function EndCard({ series, next, onNext, onClose, inline }: {
-  series: NonNullable<ReturnType<typeof getSeries>>; next?: { number: number; title: string }; onNext: () => void; onClose?: () => void; inline?: boolean;
+function EndCard({ series, previous, next, onNext, onClose, inline }: {
+  series: NonNullable<ReturnType<typeof getSeries>>; previous?: { number: number; title: string }; next?: { number: number; title: string }; onNext: () => void; onClose?: () => void; inline?: boolean;
 }) {
   const body = (
     <div className="w-full max-w-md rounded-3xl border border-white/10 bg-neutral-950/90 p-8 text-center backdrop-blur-xl">
@@ -344,8 +346,9 @@ function EndCard({ series, next, onNext, onClose, inline }: {
           <button onClick={onNext} className="btn btn-primary mt-6 w-full">Next chapter <ArrowRight size={16} /></button>
         </>
       ) : (
-        <p className="mt-2 text-sm text-white/60">You’re all caught up! New chapters drop every {series.schedule}.</p>
+        <p className="mt-2 text-sm text-white/60">You’re all caught up with the published chapters.</p>
       )}
+      {previous && <Link to={`/read/${series.slug}/${previous.number}`} className="btn mt-3 w-full border border-white/15 text-white"><ArrowLeft size={16} />Previous chapter</Link>}
       <div className="mt-3 flex gap-2">
         <Link to={`/series/${series.slug}`} className="btn flex-1 border border-white/15 text-white"><BookOpen size={15} /> Series</Link>
         {onClose && <button onClick={onClose} className="btn flex-1 border border-white/15 text-white">Re-read page</button>}
