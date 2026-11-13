@@ -109,7 +109,7 @@ catalog.find(s => s.slug === 'crimson-moonblade')!.chapters.push(crimsonChapter0
 
 catalog.push({
   slug: 'the-last-table', title: 'The Last Table', altTitle: 'One meal, one new beginning', kanji: '食卓',
-  author: 'InkBlade Originals', artist: 'InkBlade · AI-assisted', status: 'Ongoing', year: 2026,
+  author: 'InkBlade Originals', artist: 'InkBlade', status: 'Ongoing', year: 2026,
   genres: ['Slice of Life', 'Comedy', 'Cooking'],
   synopsis: 'When 24-year-old Hana Mori inherits her grandmother’s tiny railway-station diner, she arrives with a grand menu and very little practice. A teasing station attendant, a hungry bicycle courier, and a notebook of family recipes help her discover what keeps a diner alive: one good plate and a reason to come back tomorrow.',
   cover: '/comics/the-last-table/cover.webp', palette: ['#d79732', '#254f4b'],
