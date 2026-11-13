@@ -115,5 +115,18 @@
       "/comics/sakura-oathkeeper/9/005.webp",
       "/comics/sakura-oathkeeper/9/006.webp"
     ]
+  },
+  {
+    "number": 10,
+    "title": "The Watchtower Bell",
+    "date": "2026-11-13T18:22:55.161010+00:00",
+    "pages": [
+      "/comics/sakura-oathkeeper/10/001.webp",
+      "/comics/sakura-oathkeeper/10/002.webp",
+      "/comics/sakura-oathkeeper/10/003.webp",
+      "/comics/sakura-oathkeeper/10/004.webp",
+      "/comics/sakura-oathkeeper/10/005.webp",
+      "/comics/sakura-oathkeeper/10/006.webp"
+    ]
   }
 ]

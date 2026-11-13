@@ -63,5 +63,18 @@
       "/comics/neon-kitsune/5/005.webp",
       "/comics/neon-kitsune/5/006.webp"
     ]
+  },
+  {
+    "number": 6,
+    "title": "The Unlisted Streets",
+    "date": "2026-11-13T18:22:55.161010+00:00",
+    "pages": [
+      "/comics/neon-kitsune/6/001.webp",
+      "/comics/neon-kitsune/6/002.webp",
+      "/comics/neon-kitsune/6/003.webp",
+      "/comics/neon-kitsune/6/004.webp",
+      "/comics/neon-kitsune/6/005.webp",
+      "/comics/neon-kitsune/6/006.webp"
+    ]
   }
 ]
