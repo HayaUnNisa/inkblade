@@ -1,3 +1,4 @@
+import lastTableChapters from './last-table-chapters.json';
 import crimsonChapter09 from './crimson-chapter-09.json';
 import crimsonChapter08 from './crimson-chapter-08.json';
 import neonChapters from './neon-chapters.json';
@@ -106,10 +107,19 @@ export const catalog: Series[] = seeds.map(({ chapterCount, latestDaysAgo, every
 
 catalog.find(s => s.slug === 'crimson-moonblade')!.chapters.push(crimsonChapter08, crimsonChapter09);
 
+catalog.push({
+  slug: 'the-last-table', title: 'The Last Table', altTitle: 'One meal, one new beginning', kanji: '食卓',
+  author: 'InkBlade Originals', artist: 'InkBlade · AI-assisted', status: 'Ongoing', year: 2026,
+  genres: ['Slice of Life', 'Comedy', 'Cooking'],
+  synopsis: 'When 24-year-old Hana Mori inherits her grandmother’s tiny railway-station diner, she arrives with a grand menu and very little practice. A teasing station attendant, a hungry bicycle courier, and a notebook of family recipes help her discover what keeps a diner alive: one good plate and a reason to come back tomorrow.',
+  cover: '/comics/the-last-table/cover.webp', palette: ['#d79732', '#254f4b'],
+  schedule: 'Sat', direction: 'ltr', chapters: lastTableChapters,
+});
+
 export const genres = Array.from(new Set(catalog.flatMap((s) => s.genres))).sort();
 
 export const genreKanji: Record<string, string> = {
-  Action: '闘', Adventure: '旅', Comedy: '笑', Fantasy: '幻', Historical: '史', Horror: '怖',
+  Cooking: '食', Action: '闘', Adventure: '旅', Comedy: '笑', Fantasy: '幻', Historical: '史', Horror: '怖',
   'Martial Arts': '武', Mystery: '謎', Psychological: '心', Romance: '恋', School: '学',
   'Sci-Fi': '機', 'Slice of Life': '日', Supernatural: '霊', Thriller: '緊',
 };

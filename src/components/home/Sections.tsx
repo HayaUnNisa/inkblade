@@ -170,7 +170,7 @@ const clips = [
   'polygon(0 0,100% 0,96% 100%,0 100%)', 'polygon(2% 0,100% 0,100% 100%,0 100%)', 'polygon(0 0,100% 0,100% 100%,4% 100%)',
   'polygon(0 0,96% 0,100% 100%,0 100%)', 'polygon(0 0,100% 6%,100% 100%,0 94%)',
 ];
-const featuredGenres = ['Action', 'Fantasy', 'Romance', 'Mystery', 'Sci-Fi', 'Horror', 'Martial Arts', 'Slice of Life'];
+const featuredGenres = genres;
 
 export function Genres() {
   return (
@@ -184,7 +184,7 @@ export function Genres() {
               <Link
                 to={`/browse?genre=${encodeURIComponent(g)}`}
                 className="group relative flex h-full flex-col justify-between overflow-hidden bg-card p-5 transition-transform duration-500 ease-silk hover:-translate-y-1"
-                style={{ clipPath: clips[i], border: '2px solid rgb(var(--ink) / .85)' }}
+                style={{ clipPath: clips[i % clips.length], border: '2px solid rgb(var(--ink) / .85)' }}
               >
                 <span className="absolute inset-0 origin-bottom-left scale-0 bg-accent transition-transform duration-500 ease-blade group-hover:scale-100" style={{ borderRadius: '0 100% 0 0' }} />
                 <span className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: 'repeating-conic-gradient(from 0deg at 80% 30%, rgb(255 255 255 / .18) 0deg 1.4deg, transparent 1.4deg 8deg)' }} />

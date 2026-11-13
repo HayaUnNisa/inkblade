@@ -33,7 +33,7 @@ export default function Footer() {
           <div>
             <h4 className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted">Genres</h4>
             <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 text-sm font-medium">
-              {['Action', 'Fantasy', 'Sci-Fi'].filter((g) => genres.includes(g)).map((g) => (
+              {genres.map((g) => (
                 <li key={g}><Link state={{ scrollToTop: true }} to={`/browse?genre=${encodeURIComponent(g)}`} className="transition-colors hover:text-accent">{g}</Link></li>
               ))}
             </ul>

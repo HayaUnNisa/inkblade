@@ -27,12 +27,12 @@ export default function Information({ kind }: { kind: 'privacy' | 'terms' | 'cre
       <h1 className="mt-4 font-display text-4xl font-extrabold sm:text-5xl">{title}</h1>
       {kind === 'about' ? <div className="mt-8 space-y-6 leading-8 text-muted">
         <p>InkBlade is a growing collection of fictional, AI-assisted illustrated stories. Read published chapters in your browser, switch between light and dark themes, and save your place in a local reading library without an account.</p>
-        <p>Crimson Moonblade follows an exiled swordsman whose blade consumes memories. Sakura Oathkeeper explores a guardian’s promise to a castle that appears at dawn. Neon Kitsune takes the mystery to a future city, where a hacker-courier deciphers messages from a fox spirit trapped in an AI.</p>
+        <p>Crimson Moonblade follows an exiled swordsman whose blade consumes memories. Sakura Oathkeeper explores a guardian’s promise to a castle that appears at dawn. Neon Kitsune takes the mystery to a future city, where a hacker-courier deciphers messages from a fox spirit trapped in an AI. The Last Table follows a new cook rebuilding her grandmother’s railway-station diner, one meal at a time.</p>
         <p>Artwork and story material are developed with AI assistance. The names in our series credits are creative catalog names. Our collection is still developing; chapter counts reflect the pages currently available, and release plans may change.</p>
         <p>Bookmarks, reading progress and preferences stay in your current browser. We do not currently offer reader accounts, public ratings, creator submissions or an email newsletter.</p>
-        <Link className="inline-block text-accent" to="/browse">Explore the three series →</Link>
+        <Link className="inline-block text-accent" to="/browse">Explore the series →</Link>
       </div> : kind === 'creators' ? <>
-        <p className="mt-6 leading-relaxed text-muted">Explore the credits listed for our three published series. These are the creative names used in the catalog; the stories and illustrations include AI-assisted material.</p>
+        <p className="mt-6 leading-relaxed text-muted">Explore the credits listed for our published series. These are the creative names used in the catalog; the stories and illustrations include AI-assisted material.</p>
         <div className="mt-8 space-y-4">{catalog.map(s => <section key={s.slug} className="rounded-2xl border hairline bg-card/40 p-6">
           <h2 className="font-display text-2xl font-bold"><Link className="hover:text-accent" to={`/series/${s.slug}`}>{s.title}</Link></h2>
           <p className="mt-3 text-muted">Story: {s.author} · Art: {s.artist}</p>
