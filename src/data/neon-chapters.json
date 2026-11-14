@@ -76,5 +76,18 @@
       "/comics/neon-kitsune/6/005.webp",
       "/comics/neon-kitsune/6/006.webp"
     ]
+  },
+  {
+    "number": 7,
+    "title": "The Bridge Off the Map",
+    "date": "2026-11-14T20:35:15.828441+00:00",
+    "pages": [
+      "/comics/neon-kitsune/7/001.webp",
+      "/comics/neon-kitsune/7/002.webp",
+      "/comics/neon-kitsune/7/003.webp",
+      "/comics/neon-kitsune/7/004.webp",
+      "/comics/neon-kitsune/7/005.webp",
+      "/comics/neon-kitsune/7/006.webp"
+    ]
   }
 ]

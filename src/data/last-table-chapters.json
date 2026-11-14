@@ -11,5 +11,18 @@
       "/comics/the-last-table/1/005.webp",
       "/comics/the-last-table/1/006.webp"
     ]
+  },
+  {
+    "number": 2,
+    "title": "Twelve Before Noon",
+    "date": "2026-11-14T20:35:15.828441+00:00",
+    "pages": [
+      "/comics/the-last-table/2/001.webp",
+      "/comics/the-last-table/2/002.webp",
+      "/comics/the-last-table/2/003.webp",
+      "/comics/the-last-table/2/004.webp",
+      "/comics/the-last-table/2/005.webp",
+      "/comics/the-last-table/2/006.webp"
+    ]
   }
 ]

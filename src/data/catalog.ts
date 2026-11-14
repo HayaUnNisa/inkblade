@@ -1,3 +1,4 @@
+import crimsonChapter10 from './crimson-chapter-10.json';
 import lastTableChapters from './last-table-chapters.json';
 import crimsonChapter09 from './crimson-chapter-09.json';
 import crimsonChapter08 from './crimson-chapter-08.json';
@@ -105,7 +106,7 @@ export const catalog: Series[] = seeds.map(({ chapterCount, latestDaysAgo, every
   ),
 }));
 
-catalog.find(s => s.slug === 'crimson-moonblade')!.chapters.push(crimsonChapter08, crimsonChapter09);
+catalog.find(s => s.slug === 'crimson-moonblade')!.chapters.push(crimsonChapter08, crimsonChapter09, crimsonChapter10);
 
 catalog.push({
   slug: 'the-last-table', title: 'The Last Table', altTitle: 'One meal, one new beginning', kanji: '食卓',

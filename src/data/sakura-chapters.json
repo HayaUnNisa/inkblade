@@ -128,5 +128,18 @@
       "/comics/sakura-oathkeeper/10/005.webp",
       "/comics/sakura-oathkeeper/10/006.webp"
     ]
+  },
+  {
+    "number": 11,
+    "title": "A Promise Without a Seal",
+    "date": "2026-11-14T20:35:15.828441+00:00",
+    "pages": [
+      "/comics/sakura-oathkeeper/11/001.webp",
+      "/comics/sakura-oathkeeper/11/002.webp",
+      "/comics/sakura-oathkeeper/11/003.webp",
+      "/comics/sakura-oathkeeper/11/004.webp",
+      "/comics/sakura-oathkeeper/11/005.webp",
+      "/comics/sakura-oathkeeper/11/006.webp"
+    ]
   }
 ]
