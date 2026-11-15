@@ -11,7 +11,7 @@ export default function Seo() {
     const chapter = series?.chapters.find(c => String(c.number) === parts[2]);
     const isSeries = parts[0] === 'series' && parts.length === 2 && !!series;
     const isChapter = parts[0] === 'read' && parts.length === 3 && !!chapter;
-    const names: Record<string, string> = { '/': 'InkBlade — Manga & Comics', '/browse': 'Browse comics', '/rankings': 'Series rankings', '/about': 'About InkBlade', '/contact': 'Contact InkBlade', '/privacy': 'Privacy policy', '/terms': 'Terms & conditions', '/creators': 'Creators & credits', '/library': 'My library' };
+    const names: Record<string, string> = { '/': 'InkBlade | Manga & Comics, Forged in Ink', '/browse': 'Browse comics', '/rankings': 'Series rankings', '/about': 'About InkBlade', '/contact': 'Contact InkBlade', '/privacy': 'Privacy policy', '/terms': 'Terms & conditions', '/creators': 'Creators & credits', '/library': 'My library' };
     const known = !!names[pathname] || isSeries || isChapter;
     const title = isChapter ? `${series!.title} — Chapter ${chapter!.number}: ${chapter!.title}` : isSeries ? series!.title : names[pathname] || 'Page not found';
     const description = (isSeries || isChapter) ? series!.synopsis : 'Read Crimson Moonblade, Sakura Oathkeeper, Neon Kitsune and The Last Table on InkBlade. Explore illustrated stories and published chapters.';
