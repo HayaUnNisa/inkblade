@@ -11,4 +11,4 @@ The production build automatically runs both through prebuild.
 - og-image.png: social preview composed from existing InkBlade branding.
 - Seo.tsx: route-aware titles, descriptions, canonical URLs, social metadata and JSON-LD. ComicSeries, ComicStory, WebSite, BreadcrumbList and FAQPage are used. The FAQ answers are also visible on About. No fabricated reviews or author identities are added.
 
-The link checker checks catalog image files and generated internal links; it is not an external-link or browser crawler. Metadata/schema is updated by React, so crawlers must render JavaScript for route-specific data. Search engines decide indexing and rich-result eligibility. Deploy before submitting https://inkblade.xyz/sitemap.xml to Search Console.
+The link checker checks catalog image files and generated internal links; it is not an external-link or browser crawler. Metadata/schema is updated by React, so crawlers must render JavaScript for route-specific data. Search engines decide indexing and rich-result eligibility. Deploy before submitting https://www.inkblade.xyz/sitemap.xml to Search Console.

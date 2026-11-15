@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://inkblade.xyz/sitemap.xml
+Sitemap: https://www.inkblade.xyz/sitemap.xml

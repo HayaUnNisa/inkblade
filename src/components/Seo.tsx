@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { catalog } from '@/data/catalog';
 import faq from '@/data/faq.json';
-const origin = 'https://inkblade.xyz';
+const origin = 'https://www.inkblade.xyz';
 export default function Seo() {
   const { pathname } = useLocation();
   useEffect(() => {
