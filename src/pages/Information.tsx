@@ -1,3 +1,4 @@
+import faq from '@/data/faq.json';
 import { Link } from 'react-router-dom';
 import { catalog } from '@/data/catalog';
 
@@ -41,6 +42,7 @@ export default function Information({ kind }: { kind: 'privacy' | 'terms' | 'cre
       </> : <div className="mt-8 space-y-8">{(kind === 'privacy' ? privacy : terms).map(([heading, body]) => <section key={heading}>
         <h2 className="font-display text-2xl font-bold">{heading}</h2><p className="mt-3 leading-8 text-muted">{body}</p>
       </section>)}{kind === 'privacy' && <p className="leading-8 text-muted">More about external font requests: <a className="text-accent underline" href="https://developers.google.com/fonts/faq/privacy">Google Fonts privacy information</a>. For form processing, see <a className="text-accent underline" href="https://formspree.io/legal/privacy-policy/">Formspree’s privacy policy</a>.</p>}</div>}
+      {kind === 'about' && <section id="faq" className="mt-12 space-y-6"><h2 className="font-display text-3xl font-bold">Frequently asked questions</h2>{faq.map(f => <section key={f.question}><h3 className="text-xl font-bold">{f.question}</h3><p className="mt-2 leading-8 text-muted">{f.answer}</p></section>)}</section>}
       <nav aria-label="Information pages" className="mt-12 flex flex-wrap gap-6 border-t hairline pt-6 text-accent"><Link to="/contact">Contact & feedback</Link><Link to="/about">About</Link><Link to="/browse">Browse comics</Link><Link to="/privacy">Privacy policy</Link><Link to="/terms">Terms & conditions</Link><Link to="/creators">Creators</Link></nav>
     </article>
   </div>;

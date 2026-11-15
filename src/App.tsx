@@ -1,3 +1,4 @@
+import Seo from '@/components/Seo';
 import { lazy, Suspense, type ReactNode } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -40,7 +41,7 @@ export default function App() {
     <div className="grain relative min-h-screen">
       {!reading && <ScrollProgress />}
       {!reading && <Navbar />}
-      <RouteCurtain /><FooterScrollReset />
+      <Seo /><RouteCurtain /><FooterScrollReset />
       <SlashFlash />
       <Suspense fallback={<Loader />}>
         <Routes location={location} key={location.pathname}>

@@ -1,0 +1,4 @@
+const {entries,origin,xml,write}=require('./catalog.cjs');
+const chapters=entries.filter(e=>e.date).sort((a,b)=>Date.parse(b.date)-Date.parse(a.date));
+write('rss.xml','<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>InkBlade — New chapters</title><link>'+origin+'</link><description>New illustrated chapters on InkBlade.</description><language>en</language><atom:link href="'+origin+'/rss.xml" rel="self" type="application/rss+xml"/>'+chapters.map(e=>`<item><title>${xml(e.title)}</title><link>${origin+e.url}</link><guid isPermaLink="true">${origin+e.url}</guid><pubDate>${new Date(e.date).toUTCString()}</pubDate><description>${xml(e.description)}</description></item>`).join('')+'</channel></rss>\n');
+console.log(`RSS: ${chapters.length} chapters`);
