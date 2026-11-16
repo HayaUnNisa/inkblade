@@ -131,7 +131,7 @@ Crimson Moonblade chapter 1, "After the Hollow Crown", now contains six generate
 Open `/read/crimson-moonblade/1` or choose **Start reading** on the series page.
 Panels are arranged right to left. Existing single-page, spread, and vertical reader modes remain available.
 Chapters 1–7 are illustrated, with six pages each. Placeholder chapters 8–148 have been removed from the catalog. Crimson Moonblade remains Ongoing; chapter 7 is the latest available release, not the story ending. Its release timestamp ages normally after publication.
-The artwork is an AI-generated adaptation of the supplied character reference and approved outline. Existing demo author and artist labels are unchanged.
+The artwork follows the supplied character reference and approved outline.
 
 
 ## Chapter 2 — Beneath the Paper Oath

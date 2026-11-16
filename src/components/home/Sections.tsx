@@ -302,7 +302,7 @@ export function CreatorCTA() {
           <div className="relative max-w-xl">
             <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent">Behind the stories</p>
             <h2 className="mt-4 font-display text-4xl font-extrabold leading-tight sm:text-5xl">Three worlds. A new page awaits.</h2>
-            <p className="mt-5 text-base opacity-70">Discover the worlds and creative credits behind InkBlade’s AI-assisted illustrated stories.</p>
+            <p className="mt-5 text-base opacity-70">Discover the worlds and creative credits behind InkBlade’s illustrated stories.</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/creators" className="btn btn-primary"><PenTool size={16} /> Creators & credits</Link>
               <Link to="/about" className="btn border border-bg/25 text-bg hover:border-accent"><BookOpen size={16} /> About InkBlade</Link>
