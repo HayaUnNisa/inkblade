@@ -1,9 +1,8 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, BookOpen, Calendar, ChevronLeft, ChevronRight, Clock, Heart, PenTool, TrendingUp } from 'lucide-react';
-import { catalog, genreKanji, genres, getSeries, latestChapter, latestUpdates, weekdays } from '@/data/catalog';
-import type { Weekday } from '@/data/types';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ArrowRight, BookOpen, ChevronLeft, ChevronRight, Clock, PenTool, TrendingUp } from 'lucide-react';
+import { catalog, genreKanji, genres, getSeries, latestChapter, latestUpdates } from '@/data/catalog';
 import { useTheme } from '@/context/ThemeContext';
 import { useLibrary } from '@/context/LibraryContext';
 import { cn, isNew, timeAgo } from '@/lib/utils';
@@ -90,9 +89,6 @@ export function Trending() {
 /* ─────────── Latest + schedule ─────────── */
 export function LatestAndSchedule() {
   const updates = latestUpdates().slice(0, 8);
-  const today = weekdays[(new Date().getDay() + 6) % 7];
-  const [day, setDay] = useState<Weekday>(today);
-  const daySeries = catalog.filter((s) => s.schedule === day && s.status === 'Ongoing');
 
   return (
     <section className="page-x pt-24">
@@ -123,43 +119,13 @@ export function LatestAndSchedule() {
         </div>
 
         <div>
-          <SectionHeading eyebrow="Release calendar" title="This week" jp="週" />
-          <div className="rounded-2xl border hairline bg-card/40 p-4">
-            <div className="grid grid-cols-7 gap-1">
-              {weekdays.map((d) => (
-                <button key={d} onClick={() => setDay(d)} className={cn('relative rounded-xl py-2.5 text-xs font-bold transition-colors', day === d ? 'text-white' : 'text-muted hover:text-ink')}>
-                  {day === d && <motion.span layoutId="day-pill" className="absolute inset-0 rounded-xl bg-accent" transition={{ type: 'spring', stiffness: 420, damping: 34 }} />}
-                  <span className="relative">{d}</span>
-                  {d === today && <span className="relative mx-auto mt-1 block h-1 w-1 rounded-full bg-current" />}
-                </button>
-              ))}
-            </div>
-            <AnimatePresence mode="wait">
-              <motion.ul key={day} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }} className="mt-4 space-y-2">
-                {daySeries.length === 0 && (
-                  <li className="flex flex-col items-center gap-2 py-10 text-center text-sm text-muted"><Calendar size={20} />No drops scheduled — perfect day to binge.</li>
-                )}
-                {daySeries.map((s) => (
-                  <li key={s.slug}>
-                    <Link to={`/series/${s.slug}`} className="group flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-line/5">
-                      <div className="h-14 w-10 shrink-0 overflow-hidden rounded-md"><Cover series={s} showTitle={false} /></div>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-bold group-hover:text-accent">{s.title}</p>
-                        <p className="text-xs text-muted">Ch. {latestChapter(s).number + 1} · {d2(day, today)}</p>
-                      </div>
-                      <Heart size={14} className="text-muted" />
-                    </Link>
-                  </li>
-                ))}
-              </motion.ul>
-            </AnimatePresence>
-          </div>
+          <SectionHeading eyebrow="Reading at your pace" title="Keep your place" jp="読" />
+          <div className="rounded-2xl border hairline bg-card/40 p-6 leading-7"><p>New chapters appear here when they are published. We do not promise a fixed weekly release day.</p><p className="mt-4">Save a series to your library to return to it in this browser. Your bookmarks and reading progress stay on your device.</p><Link to="/library" className="btn btn-ghost mt-5">Open my library</Link></div>
         </div>
       </div>
     </section>
   );
 }
-const d2 = (d: Weekday, today: Weekday) => (d === today ? 'Today' : 'Upcoming');
 
 /* ─────────── Genres: manga page grid ─────────── */
 const panelShapes = [
@@ -240,7 +206,7 @@ export function Spotlight() {
           <Rise delay={0.15}>
             <div className="mt-6 flex flex-wrap gap-2">{s.genres.map((g) => <Link key={g} to={`/browse?genre=${g}`} className="chip">{g}</Link>)}</div>
             <dl className="mt-8 grid max-w-lg grid-cols-3 gap-4">
-              {[[BookOpen, String(s.chapters.length), 'Chapters'], [BookOpen, String(s.chapters.reduce((n, c) => n + c.pages.length, 0)), 'Pages'], [Calendar, s.status, 'Status']].map(([I, v, l]) => {
+              {[[BookOpen, String(s.chapters.length), 'Chapters'], [BookOpen, String(s.chapters.reduce((n, c) => n + c.pages.length, 0)), 'Pages'], [s.status, 'Status']].map(([I, v, l]) => {
                 const Icon = I as typeof BookOpen;
                 return (
                   <div key={l as string} className="rounded-2xl border hairline bg-card/50 p-4">
@@ -301,7 +267,7 @@ export function CreatorCTA() {
           <span aria-hidden className="vertical-jp absolute right-8 top-8 font-brush text-4xl text-accent">創作者</span>
           <div className="relative max-w-xl">
             <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent">Behind the stories</p>
-            <h2 className="mt-4 font-display text-4xl font-extrabold leading-tight sm:text-5xl">Three worlds. A new page awaits.</h2>
+            <h2 className="mt-4 font-display text-4xl font-extrabold leading-tight sm:text-5xl">Four worlds. A new page awaits.</h2>
             <p className="mt-5 text-base opacity-70">Discover the worlds and creative credits behind InkBlade’s illustrated stories.</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/creators" className="btn btn-primary"><PenTool size={16} /> Creators & credits</Link>

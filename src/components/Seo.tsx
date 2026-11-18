@@ -1,3 +1,4 @@
+import guides from '@/data/reading-guides.json';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { catalog } from '@/data/catalog';
@@ -13,8 +14,8 @@ export default function Seo() {
     const isChapter = parts[0] === 'read' && parts.length === 3 && !!chapter;
     const names: Record<string, string> = { '/': 'InkBlade | Manga & Comics, Forged in Ink', '/browse': 'Browse comics', '/rankings': 'Series rankings', '/about': 'About InkBlade', '/contact': 'Contact InkBlade', '/privacy': 'Privacy policy', '/terms': 'Terms & conditions', '/creators': 'Creators & credits', '/library': 'My library' };
     const known = !!names[pathname] || isSeries || isChapter;
-    const title = isChapter ? `${series!.title} — Chapter ${chapter!.number}: ${chapter!.title}` : isSeries ? series!.title : names[pathname] || 'Page not found';
-    const description = (isSeries || isChapter) ? series!.synopsis : 'Read Crimson Moonblade, Sakura Oathkeeper, Neon Kitsune and The Last Table on InkBlade. Explore illustrated stories and published chapters.';
+    const title = isChapter ? `${series!.title} â€” Chapter ${chapter!.number}: ${chapter!.title}` : isSeries ? series!.title : names[pathname] || 'Page not found';
+    const description = isChapter ? guides[series!.slug as keyof typeof guides].chapters[chapter!.number - 1] : isSeries ? series!.synopsis : 'Read Crimson Moonblade, Sakura Oathkeeper, Neon Kitsune and The Last Table on InkBlade. Explore illustrated stories and published chapters.';
     const url = origin + pathname;
     const cover = origin + ((isSeries || isChapter) ? series!.cover : '/og-image.png');
     document.title = title + (pathname === '/' ? '' : ' | InkBlade');
@@ -35,6 +36,7 @@ export default function Seo() {
     if (isChapter) graph.push({ '@type': 'ComicStory', '@id': url+'#story', name: title, url, description, image: chapter!.pages.map(p => origin+p), inLanguage: 'en', isAccessibleForFree: true, isPartOf: { '@type': 'ComicSeries', '@id': `${origin}/series/${series!.slug}#series`, name: series!.title } });
     if (pathname === '/about') graph.push({ '@type': 'FAQPage', '@id': url+'#faq', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })) });
     if (known && pathname !== '/') graph.push({ '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'InkBlade', item: origin+'/' }, ...(isChapter ? [{ '@type': 'ListItem', position: 2, name: series!.title, item: `${origin}/series/${series!.slug}` }] : []), { '@type': 'ListItem', position: isChapter ? 3 : 2, name: title, item: url }] });
+    document.getElementById('inkblade-schema')?.remove();
     const script = document.createElement('script'); script.type = 'application/ld+json'; script.id = 'inkblade-schema'; script.textContent = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c'); document.head.append(script);
     return () => { script.remove(); };
   }, [pathname]);

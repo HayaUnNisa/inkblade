@@ -96,10 +96,10 @@ export default function Hero() {
             </span>
           </h1>
           <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9, duration: 0.8 }} className="mt-7 max-w-lg text-base leading-relaxed text-muted sm:text-lg">
-            Premium manga and comics from bold new creators. Read in a cinematic reader, follow your favourite series and never miss a chapter drop.
+            Explore InkBlade’s illustrated stories, read published chapters and save your place in your browser’s library.
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.05, duration: 0.8 }} className="mt-9 flex flex-wrap gap-3">
-            <Link to={`/read/${catalog[0].slug}/${latestChapter(catalog[0]).number}`} className="btn btn-primary"><Play size={16} className="fill-white" /> Start reading</Link>
+            <Link to={`/read/${catalog[0].slug}/1`} className="btn btn-primary"><Play size={16} className="fill-white" /> Start reading</Link>
             <Link to="/browse" className="btn btn-ghost"><BookOpen size={16} /> Browse library</Link>
           </motion.div>
           <motion.dl initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.3 }} className="mt-12 grid max-w-md grid-cols-3 gap-6 border-t hairline pt-6">

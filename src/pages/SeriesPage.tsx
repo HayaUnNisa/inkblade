@@ -1,3 +1,4 @@
+import ReadingGuide from '@/components/ReadingGuide';
 import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
@@ -69,7 +70,7 @@ export default function SeriesPage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45, duration: 0.8 }}>
               <div className="flex flex-wrap items-center gap-2">
                 <span className={cn('rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider', s.status === 'Ongoing' ? 'bg-emerald-500/15 text-emerald-500' : s.status === 'Completed' ? 'bg-sky-500/15 text-sky-500' : 'bg-amber-500/15 text-amber-500')}>{s.status}</span>
-                <span className="font-mono text-xs text-muted">{s.year} · Updates {s.schedule}</span>
+                <span className="font-mono text-xs text-muted">{s.year} · Updates as published</span>
               </div>
               <h1 className="mt-4 font-display text-4xl font-extrabold leading-tight sm:text-6xl">{s.title}</h1>
               <p className="mt-1 font-brush text-2xl text-accent">{s.altTitle}</p>
@@ -150,7 +151,7 @@ export default function SeriesPage() {
                 <button onClick={() => setExpanded((e) => !e)} className="mt-2 text-sm font-bold text-accent">{expanded ? 'Show less' : 'Read more'}</button>
               </div>
               <dl className="divide-y hairline rounded-2xl border hairline bg-card/40">
-                {[['Author', s.author], ['Artist', s.artist], ['Status', s.status], ['Released', String(s.year)], ['Schedule', `Every ${s.schedule}`], ['Reading', s.direction === 'rtl' ? 'Right to left' : s.direction === 'ltr' ? 'Left to right' : 'Vertical scroll'], ['Last update', formatDate(last.date)]].map(([k, v]) => (
+                {[['Author', s.author], ['Artist', s.artist], ['Status', s.status], ['Released', String(s.year)], ['Schedule', 'As published'], ['Reading', s.direction === 'rtl' ? 'Right to left' : s.direction === 'ltr' ? 'Left to right' : 'Vertical scroll'], ['Last update', formatDate(last.date)]].map(([k, v]) => (
                   <div key={k} className="flex justify-between px-5 py-3 text-sm"><dt className="text-muted">{k}</dt><dd className="font-semibold">{v}</dd></div>
                 ))}
               </dl>
@@ -159,7 +160,7 @@ export default function SeriesPage() {
         </AnimatePresence>
       </section>
 
-      <section className="page-x pt-12"><div className="rounded-2xl border hairline bg-card/40 p-6"><h2 className="font-display text-2xl font-bold">What did you think?</h2><p className="mt-2 text-muted">Share your opinion or report a chapter issue privately with the InkBlade team.</p><Link to={`/contact?series=${encodeURIComponent(s.slug)}`} className="btn btn-ghost mt-4">Share feedback</Link></div></section>
+      <ReadingGuide slug={s.slug} /><section className="page-x pt-12"><div className="rounded-2xl border hairline bg-card/40 p-6"><h2 className="font-display text-2xl font-bold">What did you think?</h2><p className="mt-2 text-muted">Share your opinion or report a chapter issue privately with the InkBlade team.</p><Link to={`/contact?series=${encodeURIComponent(s.slug)}`} className="btn btn-ghost mt-4">Share feedback</Link></div></section>
 
       {related.length > 0 && (
         <section className="page-x pt-24">

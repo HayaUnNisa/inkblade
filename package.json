@@ -6,9 +6,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "generate:seo": "node scripts/generate-sitemap.cjs && node scripts/generate-rss.cjs && node scripts/generate-search-index.cjs",
+    "generate:seo": "node scripts/generate-sitemap.cjs && node scripts/generate-rss.cjs && node scripts/generate-search-index.cjs && node scripts/generate-routing.cjs",
     "check:links": "node scripts/check-broken-links.cjs",
-    "prebuild": "npm run generate:seo && npm run check:links"
+    "prebuild": "npm run generate:seo && npm run check:links",
+    "postbuild": "node scripts/prerender.cjs"
   },
   "keywords": [],
   "author": "",

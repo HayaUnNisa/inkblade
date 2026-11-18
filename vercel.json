@@ -1,1 +1,184 @@
-{ "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }] }
+{
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/browse/?",
+      "dest": "/browse/index.html"
+    },
+    {
+      "src": "/rankings/?",
+      "dest": "/rankings/index.html"
+    },
+    {
+      "src": "/about/?",
+      "dest": "/about/index.html"
+    },
+    {
+      "src": "/contact/?",
+      "dest": "/contact/index.html"
+    },
+    {
+      "src": "/privacy/?",
+      "dest": "/privacy/index.html"
+    },
+    {
+      "src": "/terms/?",
+      "dest": "/terms/index.html"
+    },
+    {
+      "src": "/creators/?",
+      "dest": "/creators/index.html"
+    },
+    {
+      "src": "/series/crimson-moonblade/?",
+      "dest": "/series/crimson-moonblade/index.html"
+    },
+    {
+      "src": "/read/crimson-moonblade/1/?",
+      "dest": "/read/crimson-moonblade/1/index.html"
+    },
+    {
+      "src": "/read/crimson-moonblade/2/?",
+      "dest": "/read/crimson-moonblade/2/index.html"
+    },
+    {
+      "src": "/read/crimson-moonblade/3/?",
+      "dest": "/read/crimson-moonblade/3/index.html"
+    },
+    {
+      "src": "/read/crimson-moonblade/4/?",
+      "dest": "/read/crimson-moonblade/4/index.html"
+    },
+    {
+      "src": "/read/crimson-moonblade/5/?",
+      "dest": "/read/crimson-moonblade/5/index.html"
+    },
+    {
+      "src": "/read/crimson-moonblade/6/?",
+      "dest": "/read/crimson-moonblade/6/index.html"
+    },
+    {
+      "src": "/read/crimson-moonblade/7/?",
+      "dest": "/read/crimson-moonblade/7/index.html"
+    },
+    {
+      "src": "/read/crimson-moonblade/8/?",
+      "dest": "/read/crimson-moonblade/8/index.html"
+    },
+    {
+      "src": "/read/crimson-moonblade/9/?",
+      "dest": "/read/crimson-moonblade/9/index.html"
+    },
+    {
+      "src": "/read/crimson-moonblade/10/?",
+      "dest": "/read/crimson-moonblade/10/index.html"
+    },
+    {
+      "src": "/series/sakura-oathkeeper/?",
+      "dest": "/series/sakura-oathkeeper/index.html"
+    },
+    {
+      "src": "/read/sakura-oathkeeper/1/?",
+      "dest": "/read/sakura-oathkeeper/1/index.html"
+    },
+    {
+      "src": "/read/sakura-oathkeeper/2/?",
+      "dest": "/read/sakura-oathkeeper/2/index.html"
+    },
+    {
+      "src": "/read/sakura-oathkeeper/3/?",
+      "dest": "/read/sakura-oathkeeper/3/index.html"
+    },
+    {
+      "src": "/read/sakura-oathkeeper/4/?",
+      "dest": "/read/sakura-oathkeeper/4/index.html"
+    },
+    {
+      "src": "/read/sakura-oathkeeper/5/?",
+      "dest": "/read/sakura-oathkeeper/5/index.html"
+    },
+    {
+      "src": "/read/sakura-oathkeeper/6/?",
+      "dest": "/read/sakura-oathkeeper/6/index.html"
+    },
+    {
+      "src": "/read/sakura-oathkeeper/7/?",
+      "dest": "/read/sakura-oathkeeper/7/index.html"
+    },
+    {
+      "src": "/read/sakura-oathkeeper/8/?",
+      "dest": "/read/sakura-oathkeeper/8/index.html"
+    },
+    {
+      "src": "/read/sakura-oathkeeper/9/?",
+      "dest": "/read/sakura-oathkeeper/9/index.html"
+    },
+    {
+      "src": "/read/sakura-oathkeeper/10/?",
+      "dest": "/read/sakura-oathkeeper/10/index.html"
+    },
+    {
+      "src": "/read/sakura-oathkeeper/11/?",
+      "dest": "/read/sakura-oathkeeper/11/index.html"
+    },
+    {
+      "src": "/series/neon-kitsune/?",
+      "dest": "/series/neon-kitsune/index.html"
+    },
+    {
+      "src": "/read/neon-kitsune/1/?",
+      "dest": "/read/neon-kitsune/1/index.html"
+    },
+    {
+      "src": "/read/neon-kitsune/2/?",
+      "dest": "/read/neon-kitsune/2/index.html"
+    },
+    {
+      "src": "/read/neon-kitsune/3/?",
+      "dest": "/read/neon-kitsune/3/index.html"
+    },
+    {
+      "src": "/read/neon-kitsune/4/?",
+      "dest": "/read/neon-kitsune/4/index.html"
+    },
+    {
+      "src": "/read/neon-kitsune/5/?",
+      "dest": "/read/neon-kitsune/5/index.html"
+    },
+    {
+      "src": "/read/neon-kitsune/6/?",
+      "dest": "/read/neon-kitsune/6/index.html"
+    },
+    {
+      "src": "/read/neon-kitsune/7/?",
+      "dest": "/read/neon-kitsune/7/index.html"
+    },
+    {
+      "src": "/series/the-last-table/?",
+      "dest": "/series/the-last-table/index.html"
+    },
+    {
+      "src": "/read/the-last-table/1/?",
+      "dest": "/read/the-last-table/1/index.html"
+    },
+    {
+      "src": "/read/the-last-table/2/?",
+      "dest": "/read/the-last-table/2/index.html"
+    },
+    {
+      "src": "/library/?",
+      "dest": "/library/index.html"
+    },
+    {
+      "src": "/.*",
+      "dest": "/404.html",
+      "status": 404
+    }
+  ]
+}

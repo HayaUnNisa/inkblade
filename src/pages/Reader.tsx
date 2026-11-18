@@ -1,3 +1,4 @@
+import ReadingGuide from '@/components/ReadingGuide';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -171,7 +172,7 @@ export default function Reader() {
           <div className="mx-auto flex flex-col items-center py-4" style={{ width: `min(100%, ${settings.zoom * 10}px)`, gap: settings.gap ? 20 : 0 }}>
             {pages.map((_, i) => <div key={i} data-page={i} className="w-full">{renderPage(i, 'w-full h-auto')}</div>)}
           </div>
-          <EndCard series={series} previous={prevCh} next={nextCh} onNext={() => nextCh && goChapter(nextCh.number)} inline />
+          <ReadingGuide slug={series.slug} chapter={ch.number} /><EndCard series={series} previous={prevCh} next={nextCh} onNext={() => nextCh && goChapter(nextCh.number)} inline />
         </div>
       ) : (
         <div className="relative flex min-h-0 flex-1 items-start justify-center overflow-auto py-4">
@@ -223,7 +224,7 @@ export default function Reader() {
           >
             {[...series.chapters].reverse().map((c) => <option key={c.number} value={c.number} className="bg-neutral-900">Ch. {c.number} — {c.title}</option>)}
           </select>
-          <select aria-label="Reading layout" value={settings.mode} onChange={e => set('mode', e.target.value as Mode)} className="ml-auto max-w-[120px] rounded-lg border border-white/15 bg-neutral-900 px-2 py-2 text-xs"><option value="vertical">Scroll pages</option><option value="single">Single page</option><option value="double">Two pages</option></select>
+          <button className="rounded border border-white/20 px-2 py-2 text-xs" onClick={() => { set('mode', 'vertical'); window.setTimeout(() => scroller.current?.querySelector('#reading-notes')?.scrollIntoView(), 100); }}>Reading notes</button><select aria-label="Reading layout" value={settings.mode} onChange={e => set('mode', e.target.value as Mode)} className="ml-auto max-w-[120px] rounded-lg border border-white/15 bg-neutral-900 px-2 py-2 text-xs"><option value="vertical">Scroll pages</option><option value="single">Single page</option><option value="double">Two pages</option></select>
           <button onClick={() => setPanel(panel === 'pages' ? null : 'pages')} className={cn('grid h-10 w-10 place-items-center rounded-full backdrop-blur transition', panel === 'pages' ? 'bg-accent' : 'bg-white/10 hover:bg-white/20')} aria-label="All pages"><LayoutGrid size={17} /></button>
           <button onClick={() => setPanel(panel === 'settings' ? null : 'settings')} className={cn('grid h-10 w-10 place-items-center rounded-full backdrop-blur transition', panel === 'settings' ? 'bg-accent' : 'bg-white/10 hover:bg-white/20')} aria-label="Reader settings"><Settings2 size={17} /></button>
           <button onClick={toggleFull} className="hidden h-10 w-10 place-items-center rounded-full bg-white/10 backdrop-blur transition hover:bg-white/20 sm:grid" aria-label="Fullscreen">{full ? <Shrink size={17} /> : <Expand size={17} />}</button>

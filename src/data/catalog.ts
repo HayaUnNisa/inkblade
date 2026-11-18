@@ -4,8 +4,8 @@ import crimsonChapter09 from './crimson-chapter-09.json';
 import crimsonChapter08 from './crimson-chapter-08.json';
 import neonChapters from './neon-chapters.json';
 import sakuraChapters from './sakura-chapters.json';
-import type { Chapter, Series, Weekday } from './types';
-import { seeded } from '@/lib/utils';
+import type { Series, Weekday } from './types';
+
 
 /* ════════════════════════════════════════════════════════════════════
    CATALOG
@@ -31,32 +31,12 @@ export function pages(slug: string, chapter: number, count: number, ext = 'webp'
   return Array.from({ length: count }, (_, i) => `/comics/${slug}/${chapter}/${String(i + 1).padStart(3, '0')}.${ext}`);
 }
 
-const TITLE_A = ['The', 'A', 'Beneath the', 'Before the', 'After the', 'Within the', 'Beyond the', 'Under the'];
-const TITLE_B = [
-  'Silent Blade', 'Red Tide', 'Paper Oath', 'Broken Lantern', 'First Snow', 'Iron Bell', 'Long Night',
-  'Hidden Gate', 'Ash Garden', 'Moon Debt', 'Ninth Scroll', 'Last Duel', 'Falling Petals', 'Crow Market',
-  'Glass Shrine', 'Storm Pact', 'Hollow Crown', 'Ink Serpent', 'River of Lies', 'Burning Sky',
-];
-
-/** Generates demo chapters until real ones are uploaded. Newest chapter dropped `latestDaysAgo` days ago. */
-function demoChapters(slug: string, count: number, latestDaysAgo: number, every = 7): Chapter[] {
-  const r = seeded(slug + 'ch');
-  const now = Date.now();
-  return Array.from({ length: count }, (_, i) => {
-    const number = i + 1;
-    const daysAgo = latestDaysAgo + (count - number) * every;
-    const date = new Date(now - daysAgo * 86400000 - Math.floor(r() * 8) * 3600000).toISOString();
-    const title = `${TITLE_A[Math.floor(r() * TITLE_A.length)]} ${TITLE_B[Math.floor(r() * TITLE_B.length)]}`;
-    return { number, title, date, pages: [], placeholderPages: 14 + Math.floor(r() * 10) };
-  });
-}
-
 type Seed = Omit<Series, 'chapters'> & { chapterCount: number; latestDaysAgo: number; every?: number };
 
 const seeds: Seed[] = [
   {
     slug: 'crimson-moonblade', title: 'Crimson Moonblade', altTitle: '紅月の刃', kanji: '紅月',
-    author: 'Ren Kagami', artist: 'Ren Kagami', status: 'Ongoing', year: 2023,
+    author: 'InkBlade', artist: 'InkBlade', status: 'Ongoing', year: 2026,
     genres: ['Action'],
     synopsis:
       'Under a moon that bleeds every hundred years, the exiled swordsman Akane Shiro carries a blade that drinks memory instead of blood. Each cut erases a piece of who he was — and the shrine-lords who exiled him are counting on him forgetting why.',
@@ -66,7 +46,7 @@ const seeds: Seed[] = [
   },
   {
     slug: 'sakura-oathkeeper', title: 'Sakura Oathkeeper', altTitle: '桜の誓い', kanji: '桜誓',
-    author: 'Mio Hanazono', artist: 'Kei Arashi', status: 'Ongoing', year: 2024,
+    author: 'InkBlade', artist: 'InkBlade', status: 'Ongoing', year: 2026,
     genres: ['Fantasy'],
     synopsis:
       'Sworn to guard a sky-castle that only appears at sunrise, Yuki Shirogane has kept her oath for three hundred dawns. When a stranger climbs the waterfall stair carrying her own lost sword, the oath begins to unravel petal by petal.',
@@ -76,7 +56,7 @@ const seeds: Seed[] = [
   },
   {
     slug: 'neon-kitsune', cover: '/comics/neon-kitsune/cover.webp', title: 'Neon Kitsune', altTitle: '電狐', kanji: '電狐',
-    author: 'Aya Takeda', artist: 'Studio Hoshi', status: 'Ongoing', year: 2025,
+    author: 'InkBlade', artist: 'InkBlade', status: 'Ongoing', year: 2026,
     genres: ['Sci-Fi'],
     synopsis:
       'Neo-Kyoto, 2189. A fox spirit trapped inside a city-wide AI starts leaving riddles in traffic lights. Hacker-courier Sora is the only one who can read them — and every answer gets someone erased from the grid.',
@@ -85,25 +65,17 @@ const seeds: Seed[] = [
   },
 ];
 
-export const catalog: Series[] = seeds.map(({ chapterCount, latestDaysAgo, every, ...s }) => ({
+export const catalog: Series[] = seeds.map(({ chapterCount: _count, latestDaysAgo: _latest, every: _every, ...s }) => ({
   ...s,
-  chapters: s.slug === 'neon-kitsune' ? neonChapters : s.slug === 'sakura-oathkeeper' ? sakuraChapters : demoChapters(s.slug, chapterCount, latestDaysAgo, every).map((chapter) =>
-    s.slug === 'crimson-moonblade' && chapter.number === 1
-      ? { ...chapter, title: 'After the Hollow Crown', pages: pages(s.slug, 1, 6, 'webp'), placeholderPages: undefined }
-      : s.slug === 'crimson-moonblade' && chapter.number === 2
-      ? { ...chapter, title: 'Beneath the Paper Oath', pages: pages(s.slug, 2, 6, 'webp'), placeholderPages: undefined }
-      : s.slug === 'crimson-moonblade' && chapter.number === 3
-      ? { ...chapter, title: 'Beneath the Last Duel', pages: pages(s.slug, 3, 6, 'webp'), placeholderPages: undefined }
-      : s.slug === 'crimson-moonblade' && chapter.number === 4
-      ? { ...chapter, title: 'A Falling Petals', pages: pages(s.slug, 4, 6, 'webp'), placeholderPages: undefined }
-      : s.slug === 'crimson-moonblade' && chapter.number === 5
-      ? { ...chapter, title: "Within the Red Tide", pages: pages(s.slug, 5, 6, 'webp'), placeholderPages: undefined }
-      : s.slug === 'crimson-moonblade' && chapter.number === 6
-      ? { ...chapter, title: "Beyond the Ash Garden", pages: pages(s.slug, 6, 6, 'webp'), placeholderPages: undefined }
-      : s.slug === 'crimson-moonblade' && chapter.number === 7
-      ? { ...chapter, title: "The Hidden Gate", date: '2026-11-10T17:14:41.1190379Z', pages: pages(s.slug, 7, 6, 'webp'), placeholderPages: undefined }
-      : chapter,
-  ),
+  chapters: s.slug === 'neon-kitsune' ? neonChapters : s.slug === 'sakura-oathkeeper' ? sakuraChapters : [
+    { number: 1, title: "After the Hollow Crown", date: '2026-11-10T17:14:41Z', pages: pages(s.slug, 1, 6) },
+    { number: 2, title: "Beneath the Paper Oath", date: '2026-11-10T17:14:41Z', pages: pages(s.slug, 2, 6) },
+    { number: 3, title: "Beneath the Last Duel", date: '2026-11-10T17:14:41Z', pages: pages(s.slug, 3, 6) },
+    { number: 4, title: "Falling Petals", date: '2026-11-10T17:14:41Z', pages: pages(s.slug, 4, 6) },
+    { number: 5, title: "Within the Red Tide", date: '2026-11-10T17:14:41Z', pages: pages(s.slug, 5, 6) },
+    { number: 6, title: "Beyond the Ash Garden", date: '2026-11-10T17:14:41Z', pages: pages(s.slug, 6, 6) },
+    { number: 7, title: "The Hidden Gate", date: '2026-11-10T17:14:41Z', pages: pages(s.slug, 7, 6) },
+  ],
 }));
 
 catalog.find(s => s.slug === 'crimson-moonblade')!.chapters.push(crimsonChapter08, crimsonChapter09, crimsonChapter10);
